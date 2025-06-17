@@ -150,10 +150,6 @@ class StructureHelper
     public static function closedBranches()
     {
         return $arr = [
-            14302,
-            1730,
-            1732,
-            3503,
             109,
             1808,
             1202,
