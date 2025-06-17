@@ -67,6 +67,7 @@ class AccountReportsController extends Controller
         $params = Yii::$app->request->post();
         /*print_r($params);
         die();*/
+        
         $project_id = 0;
         $account_report_dates =array();
         if(isset($params['ArcAccountReportDetailsSearch']['project_id'])){
