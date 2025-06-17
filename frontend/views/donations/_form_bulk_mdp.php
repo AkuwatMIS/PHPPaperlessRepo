@@ -1,0 +1,275 @@
+<?php
+use yii\helpers\Html;
+use yii\helpers\BaseHtml;
+use yii\widgets\ActiveForm;
+use yii\jui\DatePicker;
+use wbraganca\dynamicform\DynamicFormWidget;
+
+/* @var $this yii\web\View */
+/* @var $model common\models\Recoveries */
+/* @var $form yii\widgets\ActiveForm */
+$js = '
+jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+    jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
+        jQuery(this).html("Address: " + (index + 1))
+    });
+});
+
+jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
+    jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
+        jQuery(this).html("Address: " + (index + 1))
+    });
+});
+';
+$js .= "
+$(document).ready(function(){
+    $('.sanction_no').blur(function(e) {
+        var id = this.id.split('-');
+        var sr = id[1];
+        //sanction_no = this.value;
+        if(this.value){
+            sanction_no = this.value;
+        }
+        
+        $.ajax({
+           //alert(this.value);
+           url: '/donations/get-member-info',
+           type: 'POST',
+           dataType: 'JSON',
+           data: {sanc_no: sanction_no},
+           success: function(data, status){
+                if(status == 'success'){
+                    if(data.error != null){
+                        $('#recoveries-'+sr+'-error').text(data.error);
+                        $('#recoveries-'+sr+'-error').show();
+                        $('#recoveries-'+sr+'-error').delay(4000).fadeOut(3000);
+                    }else{
+                        $('#recoveries-'+sr+'-name').val(data.name+' ('+data.cnic+')');
+                    }
+                }else{
+                }
+           }
+        });
+    });
+});
+";
+$js .= "
+    if($.cookie('branch')){
+        $('#branch').val($.cookie('branch'));
+    }
+    $('#branch').change(function(){
+        $.cookie('branch', $('#branch').val(), { expires: 7 });
+    });
+    if($.cookie('project')){
+        $('#project').val($.cookie('project'));
+    }
+    $('#project').change(function(){
+        $.cookie('project', $('#project').val(), { expires: 7 });
+    });
+    if($.cookie('w0')){
+        $('#w0').val($.cookie('w0'));
+    }
+    $('#w0').change(function(){
+        $.cookie('w0', $('#w0').val(), { expires: 7 });
+    });
+    if($.cookie('n')){
+        $('#n').val($.cookie('n'));
+    }
+    $('#n').change(function(){
+        $.cookie('n', $('#n').val(), { expires: 7 });
+    });
+";
+
+$this->registerJs($js);
+
+$branch_code = isset($_GET['code']) ? ($_GET['code']) : '';
+$funding_line = '';
+$project = '';
+if (isset($_GET['project'])) {
+    $project = $_GET['project'];
+    $p = explode('_', $_GET['project']);
+    $funding_line = $p[0];
+}
+$receive_date = isset($_GET['receive_date']) ? ($_GET['receive_date']) : '';
+$n = isset($_GET['n']) ? ($_GET['n']) : '';
+/*echo '<pre>';
+print_r($model);
+die();*/
+?>
+
+
+<div style="border:1px solid #d6e9c6;padding:10px;">
+    <?= Html::beginForm([''], 'get', ['enctype' => 'multipart/form-data', 'id' => 'form']); ?>
+    <div class="row">
+        <div class="col-sm-3">
+
+            <?= Html::dropDownList('code', $branch_code, $branches, array('class' => 'form-control', 'id' => 'branch', 'prompt' => 'SELECT BRANCH')) ?>
+            <div class="help-block"></div>
+        </div>
+        <div class="col-sm-3">
+
+            <?php echo \kartik\depdrop\DepDrop::widget([
+                'name' => 'project',
+                'pluginOptions' => ['name' => 'project', 'id' => 'project',
+                    'depends' => ['branch'],
+                    'placeholder' => 'Select Project',
+                    'url' => \yii\helpers\Url::to(['/structure/branchprojects'])
+                ]]); ?>
+            <div class="help-block"></div>
+        </div>
+        <div class="col-sm-2">
+
+            <?php echo DatePicker::widget([
+                'name' => 'receive_date',
+                'value' => $receive_date,
+                'options' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Recv Date',
+                    'readonly' => 'readonly',
+                    'beforeShowDay' => 'js:editDays',
+
+                ],
+                'language' => 'en',
+                'dateFormat' => 'yyyy-MM-dd',
+
+            ]); ?>
+            <div class="help-block"></div>
+        </div>
+        <div class="col-sm-2">
+            <?php
+            $number_array = array();
+            for ($i = 1; $i <= 100; $i++) {
+                if ($i >= 1 && $i <= 10) {
+                    $number_array[$i] = $i;
+                } else {
+                    if ($i % 5 == 0) {
+                        $number_array[$i] = $i;
+                    }
+                }
+            }
+            ?>
+            <?= Html::dropDownList('n', $n, $number_array, array('class' => 'form-control', 'id' => 'n', 'prompt' => '# Donations')) ?>
+            <div class="help-block"></div>
+        </div>
+
+        <div class="col-md-2"><?= Html::submitButton('Submit', ['class' => 'btn btn-success']) ?></div>
+
+
+        <?= Html::endForm(); ?>
+
+    </div>
+
+</div>
+
+<div class="customer-form" style="margin-top: 10px;">
+
+    <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
+
+    <div class="padding-v-md">
+        <div class="line line-dashed"></div>
+    </div>
+    <?php DynamicFormWidget::begin([
+        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+        'widgetBody' => '.container-items', // required: css class selector
+        'widgetItem' => '.item', // required: css class
+        'limit' => 4, // the maximum times, an element can be cloned (default 999)
+        'min' => 1, // 0 or 1 (default 1)
+        'insertButton' => '.add-item', // css class
+        'deleteButton' => '.remove-item', // css class
+        'model' => $model[0],
+        'formId' => 'dynamic-form',
+        'formFields' => [
+            'receive_date',
+            'amount',
+            'receipt_no',
+        ],
+    ]); ?>
+    <section class="card card-green mb-3">
+        <header class="card-header">
+            <i class="fa fa-gift"></i> Post Donations(MDP)
+            <div class="clearfix"></div>
+        </header>
+        <div class="card-block">
+          <div class="panel panel-success">
+            <div class="panel-body container-items"><!-- widgetContainer -->
+                <div class="row">
+                    <div class="col-sm-2 text-center"><h6>Sanction No.</h6></div>
+                    <div class="col-sm-3 text-center"><h6>Borrower (CNIC)</h6></div>
+                    <div class="col-sm-2 text-center"><h6>Recv Date</h6></div>
+                    <div class="col-sm-2 text-center"><h6>Receipt No</h6></div>
+                    <div class="col-sm-1 text-center"><h6>MDP</h6></div>
+                    <div class="col-sm-1 text-center"></div>
+
+                </div>
+                <?php foreach ($model as $index => $modelRecovery):
+
+                    if (!empty($branch_code) && !empty($funding_line)) {
+                        if (!isset($modelRecovery->sanction_no)) {
+                            $modelRecovery->sanction_no = $branch_code . '-' . $funding_line . '-';
+                            $modelRecovery->receive_date = $receive_date;
+                        }
+                    }
+                    ?>
+
+                    <div class="item panel panel-default">
+
+                        <div class="row">
+
+                            <div class="col-sm-2">
+                                <?= $form->field($modelRecovery, "[{$index}]sanction_no")->textInput(['class' => 'form-control sanction_no', 'placeholder' => 'Sanction No'])->label(false) ?>
+                            </div>
+                            <div class="col-sm-3">
+                                <?= HTML::textInput('name', '', array('class' => 'form-control', 'id' => "recoveries-{$index}-name", 'disabled' => 'disabled')) ?>
+                                <div class="help-block"></div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <?= $form->field($modelRecovery, "[{$index}]receive_date")->widget(\yii\jui\DatePicker::className(), [
+                                    'dateFormat' => 'yyyy-MM-dd',
+                                    'options' => ['class' => 'form-control', 'placeholder' => 'Recv Date']
+                                ])->label(false); ?>
+                            </div>
+                            <div class="col-sm-2">
+                                <?= $form->field($modelRecovery, "[{$index}]receipt_no")->textInput(['maxlength' => true, 'placeholder' => 'Receipt No'])->label(false) ?>
+                            </div>
+                            <div class="col-sm-2">
+                                <?= $form->field($modelRecovery, "[{$index}]amount")->textInput(['maxlength' => true, 'placeholder' => 'Donation'])->label(false) ?>
+                            </div>
+
+                            <div class="col-sm-1">
+                                <button type="button" class="pull-left remove-item btn btn-danger btn-xs"><span
+                                            class="glyphicon glyphicon-trash"></span></button>
+                            </div>
+
+                        </div><!-- end:row -->
+                        <?php
+
+                        if (isset($modelRecovery->id)) {
+
+                            ?>
+                            <div
+                                    style="opacity:1;background-color: #26B99A;position: absolute;">Donation Saved
+                                Succesfully
+                            </div>
+
+                            <?php
+                        }
+                        ?>
+                        <?= $form->errorSummary($modelRecovery); ?>
+                        <div id="recoveries-<?php echo $index ?>-error" class="alert alert-danger"
+                             style="display:none;"></div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php DynamicFormWidget::end(); ?>
+</div>
+</section>
+<div class="form-group">
+    <?= Html::submitButton($modelRecovery->isNewRecord ? 'Save' : 'Save', ['class' => $modelRecovery->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+</div>
+
+<?php ActiveForm::end(); ?>
+
+</div>
+</div>

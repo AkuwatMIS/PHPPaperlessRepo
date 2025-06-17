@@ -1,0 +1,85 @@
+<?php
+use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\bootstrap\Modal;
+use yii\grid\GridView;
+use johnitvn\ajaxcrud\CrudAsset; 
+use johnitvn\ajaxcrud\BulkButtonWidget;
+
+/* @var $this yii\web\View */
+/* @var $searchModel common\models\search\DonationsSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Donations';
+$this->params['breadcrumbs'][] = $this->title;
+
+CrudAsset::register($this);
+$permissions = Yii::$app->session->get('permissions');
+?>
+<div class="container-fluid">
+    <div class="box-typical box-typical-padding">
+        <h6 class="address-heading"><span class="glyphicon glyphicon-gift"></span>
+            Donations List
+        <?php if(in_array('frontend_add-bulk-mdpdonations',$permissions))
+            { ?>
+            <a href="/donations/add-bulk-mdp" class="btn btn-success pull-right" title="Post Donations">Post Donations</a></h6>
+        <?php }?>
+        <?php echo $this->render('_search', [
+            'model' => $searchModel,
+            'regions'=>$regions,
+            'projects'=>$projects,
+            'branches'=>$branches,
+        ]); ?>
+        <div class="table-responsive">
+            <div class="dropdown" style="width: 10%">
+                <button title="Export to CSV" class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
+                    <i class="glyphicon glyphicon-export"></i>
+                    <span class="caret"></span></button>
+
+                <ul class="dropdown-menu pull-right" role="menu" style="height: 30px;" aria-labelledby="menu1">
+                    <li role="presentation" >
+                        <form action="/donations/index">
+                            <input type="hidden" name="DonationsSearch[region_id]" value="<?php echo $searchModel->region_id ?>">
+                            <input type="hidden" name="DonationsSearch[area_id]" value="<?php echo  $searchModel->area_id ?>">
+                            <input type="hidden" name="DonationsSearch[branch_id]" value="<?php echo  $searchModel->branch_id ?>">
+                            <input type="hidden" name="DonationsSearch[sanction_no]" value="<?php echo  $searchModel->sanction_no ?>">
+                            <input type="hidden" name="DonationsSearch[member_name]" value="<?php echo  $searchModel->member_name ?>">
+                            <input type="hidden" name="DonationsSearch[member_cnic]" value="<?php echo  $searchModel->member_cnic ?>">
+                            <input type="hidden" name="DonationsSearch[receive_date]" value="<?php echo  $searchModel->receive_date ?>">
+                            <input type="hidden" name="DonationsSearch[amount]" value="<?php echo  $searchModel->amount ?>">
+                            <input type="hidden" name="DonationsSearch[receipt_no]" value="<?php echo  $searchModel->receipt_no ?>">
+                            <input type="hidden" name="DonationsSearch[project_id]" value="<?php echo  $searchModel->project_id ?>">
+                            <button title="Export to CSV" type="submit" name="export" value="export" class="btn btn-default col-sm-12 btn-sm" role="menuitem" tabindex="-1"><i class="text-primary glyphicon glyphicon-floppy-open"></i> CSV</button>
+
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <?php if(!empty($dataProvider)){ ?>
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'columns' => require(__DIR__ . '/_columns.php'),
+                'tableOptions' => ['class' => 'table table-bordered table-hover table-xs'],
+                'pager' => [
+                    'options'=>['class'=>'pagination'],   // set clas name used in ui list of pagination
+                    'prevPageLabel' => 'Previous',   // Set the label for the "previous" page button
+                    'nextPageLabel' => 'Next',   // Set the label for the "next" page button
+                    'firstPageLabel'=>'First',   // Set the label for the "first" page button
+                    'lastPageLabel'=>'Last',    // Set the label for the "last" page button
+                    'nextPageCssClass'=>'next',    // Set CSS class for the "next" page button
+                    'prevPageCssClass'=>'prev',    // Set CSS class for the "previous" page button
+                    'firstPageCssClass'=>'first',    // Set CSS class for the "first" page button
+                    'lastPageCssClass'=>'last',    // Set CSS class for the "last" page button
+                    'maxButtonCount'=>10,    // Set maximum number of page buttons that can be displayed
+                ],
+            ]); ?>
+        <?php } ?>
+        </div>
+    </div>
+</div>
+<?php Modal::begin([
+    "id"=>"ajaxCrudModal",
+    "footer"=>"",// always need it for jquery plugin
+])?>
+<?php Modal::end(); ?>

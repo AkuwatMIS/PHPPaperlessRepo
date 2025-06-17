@@ -1,0 +1,30 @@
+<?php
+$data = file_get_contents('php://input');
+$data=json_decode($data,true);
+$access_token=apache_request_headers()['Authorization'];
+$headers = array
+(
+    'Content-Type: application/json',
+    'Authorization: ' . $access_token,
+);
+$body['reportDataObj'] =[
+    "CNIC"=>$data['CNIC'],
+    "fullName"=>$data['fullName'],
+    "dateOfBirth"=>$data['dateOfBirth'],
+    "loanAmount"=>$data['loanAmount'],
+    "gender"=>$data['gender'],
+    "currentAddress"=>$data['currentAddress'],
+];
+//$url=$data['url'];
+$url='https://cib.tasdeeq.com:8888/'.'TestCreditInformationReport/';
+//$url='https://cib.tasdeeq.com:8888/CustomCreditInformationReportUpdated/';
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+$result = curl_exec($ch);
+curl_close($ch);
+echo $result;
+?>

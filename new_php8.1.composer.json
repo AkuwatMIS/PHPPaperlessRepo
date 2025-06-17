@@ -1,0 +1,81 @@
+{
+    "name": "yiisoft/yii2-app-advanced",
+    "description": "Yii 2 Advanced Project Template",
+    "keywords": ["yii2", "framework", "advanced", "project template"],
+    "homepage": "http://www.yiiframework.com/",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/yiisoft/yii2/issues?state=open",
+        "forum": "http://www.yiiframework.com/forum/",
+        "wiki": "http://www.yiiframework.com/wiki/",
+        "irc": "irc://irc.freenode.net/yii",
+        "source": "https://github.com/yiisoft/yii2"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.1",
+        "yiisoft/yii2": "~2.0.47",
+        "yiisoft/yii2-bootstrap": "~2.0.10",
+        "yiisoft/yii2-swiftmailer": "~2.1.0",
+        "kartik-v/yii2-widget-depdrop": "@dev",
+        "yiisoft/yii2-jui": "^2.0",
+        "sammaye/yii2-audittrail": "^1.2",
+        "wbraganca/yii2-dynamicform": "dev-master",
+        "kartik-v/yii2-widget-datepicker": "@dev",
+        "johnitvn/yii2-ajaxcrud": "*",
+        "bryglen/yii2-sendgrid": "dev-master",
+        "kartik-v/yii2-grid": "@dev",
+        "johnitvn/yii2-rbac-plus": "dev-master",
+        "2amigos/yii2-file-upload-widget": "~1.0",
+        "kartik-v/yii2-detail-view": "*",
+        "kartik-v/yii2-widgets": "^3.4",
+        "kartik-v/yii2-date-range": "*",
+        "kalyabin/yii2-select-google-map-location": "*",
+        "yiisoft/yii2-authclient": "^2.0@dev",
+        "nepster-web/yii2-module-users": "dev-master",
+        "pigochu/yii2-jquery-locationpicker": ">=0.2.0",
+        "kartik-v/yii2-widget-select2": "@dev",
+        "yiister/yii2-gentelella": "~1.0",
+        "kartik-v/yii2-export": "*",
+        "yii2tech/csv-grid": "^1.0",
+        "kartik-v/yii2-widget-switchinput": "*",
+        "moonlandsoft/yii2-phpexcel": "*",
+        "kop/yii2-scroll-pager": "dev-master",
+        "nirvana-msu/yii2-infinite-scroll": "dev-master",
+        "kartik-v/yii2-field-range": "*",
+        "borales/yii2-phone-input": "^0.3.0",
+        "phpmailer/phpmailer": "^6.0",
+        "kartik-v/yii2-tabs-x": "*",
+        "budyaga/yii2-cropper": "*",
+        "dimmitri/yii2-expand-row-column": "*",
+        "consik/yii2-websocket": "^1.0",
+        "hscstudio/yii2-export": "1.0.0",
+        "drsdre/yii2-wizardwidget": "*",
+        "elasticsearch/elasticsearch": "^7.0",
+        "yiisoft/yii2-elasticsearch": "^2.1"
+    },
+    "require-dev": {
+        "yiisoft/yii2-debug": "~2.1",
+        "yiisoft/yii2-gii": "~2.1",
+        "yiisoft/yii2-faker": "~2.0.4",
+        "codeception/codeception": "^4.2",
+        "codeception/verify": "^1.0"
+    },
+    "config": {
+        "process-timeout": 1800,
+        "fxp-asset": {
+            "enabled": false
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}
