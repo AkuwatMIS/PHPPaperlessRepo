@@ -203,7 +203,7 @@ class Loans extends \yii\db\ActiveRecord
 
     public function setLoaninfo()
     {
-        if (!in_array($this->project_id, StructureHelper::trancheProjects()) && !in_array($this->project_id, [132,75,35,6, 10, 59, 78, 128, 87, 74, 94, 83, 100, 106, 112, 118, 119, 121, 123, 124, 125, 126, 111, 122, 96, 113, 24, 129, 130, 109, 131,134,135,136,137,138,139,140,141,142])) {
+        if (!in_array($this->project_id, StructureHelper::trancheProjects()) && !in_array($this->project_id, [132,75,35,6, 10, 59, 78, 128, 87, 74, 94, 83, 100, 106, 112, 118, 119, 121, 123, 124, 125, 126, 111, 122, 96, 113, 24, 129, 130, 109, 131,134,135,136,137,138,139,140,141,142,143])) {
             $this->inst_months = 0;
         }
 
@@ -404,6 +404,12 @@ class Loans extends \yii\db\ActiveRecord
             $total_amount = $this->loan_amount + $charges;
             $this->inst_amnt = round($total_amount / $this->inst_months);
         } else if ($this->project_id == 138) {
+            $charges_percentage = LoanHelper::getProjectChargesFromId($this->project_id);
+            $years = ($this->inst_months / 12);
+            $charges = ($this->loan_amount * $charges_percentage * $years) / 100;
+            $total_amount = $this->loan_amount + $charges;
+            $this->inst_amnt = round($total_amount / $this->inst_months);
+        } else if ($this->project_id == 143) {
             $charges_percentage = LoanHelper::getProjectChargesFromId($this->project_id);
             $years = ($this->inst_months / 12);
             $charges = ($this->loan_amount * $charges_percentage * $years) / 100;
