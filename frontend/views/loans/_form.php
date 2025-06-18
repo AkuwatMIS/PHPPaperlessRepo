@@ -231,6 +231,11 @@ function calc_inst(){
                     var years=(totalmonths/12);
                     var total_amount=parseInt(loan_amount);
                     var inst_amnt = Math.round((total_amount/totalmonths) / 100) *100;
+                  } else if(project_id == \"35\" && parseInt(loan_amount) > 50000){
+                    var charges=Math.round(loan_amount*charges_percentage)/100;
+                    var total_amount=parseInt(loan_amount)+parseInt(charges);
+                    var inst_amnt = Math.ceil(total_amount / totalmonths);
+                    var rounded_inst_amnt = Math.ceil(inst_amnt / 100) * 100; 
                   }else if(project_id == \"24\" && parseInt(loan_amount) <= 40000){
                     var years=(totalmonths/12);
                     var total_amount=parseInt(loan_amount);
