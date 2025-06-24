@@ -40,57 +40,32 @@ class PmypController extends Controller
 
     public function actionLogin()
     {
-        $curl = curl_init();
+        $body = [
+            "username" => 'PMYPAkhuwat',
+            "password" => 'PMYP^&*Akhuwat#834'
+        ];
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.pmyp.gov.pk/users/authenticate',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>'{
-                     "username" : "PMYPAkhuwat",
-                    "password" : "PMYP^&*Akhuwat#834"
-              }',
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/json',
-                'Cookie: cookiesession1=678B28EBE73226A4B5FEB6E8F9B7D304'
-            ),
-        ));
-        $response = curl_exec($curl);
-        
-        if (curl_errno($curl)) {
-            $error_msg = curl_error($curl);
-            // In console, log to console output or a file directly
-            $this->stderr("cURL Error: " . $error_msg . "\n"); // Use stderr for errors
-            return self::EXIT_CODE_ERROR; // Indicate an error occurred
-        }
+        $headers = array
+        (
+            'Content-Type: application/json'
+        );
 
-        $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
 
-        // Log the full response for debugging (console output)
-        $this->stdout("API Response (HTTP {$http_code}): " . $response . "\n");
+        $ch = curl_init('https://api.pmyp.gov.pk/users/authenticate');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $result = curl_exec($ch);
+        $result = json_decode($result);
 
-        $data = json_decode($response, true);
-
-        if ($http_code === 200 && $data && isset($data['token'])) {
-            $this->stdout("Authentication successful!\n");
-            $this->stdout("token: " . $data['token'] . "\n"); // Or whatever data you need
-            $this->stdout("Id: " . $data['id'] . "\n"); // Or whatever data you need
-            // You might return the token or process it further
-            return self::EXIT_CODE_NORMAL;
-        } else {
-            $this->stderr("API authentication failed.\n");
-            $this->stderr("Response: " . print_r($data, true) . "\n");
-            $this->stderr("HTTP Code: " . $http_code . "\n");
-            return self::EXIT_CODE_ERROR;
-        }
+        $response = [
+            'success' => true,
+            'id' => $result->id,
+            'token' => $result->token,
+        ];
+        return $response;
     }
 
     public function actionDataByCnic($auth, $nic)
@@ -192,9 +167,7 @@ class PmypController extends Controller
 
         } elseif ($type == 'get') {
             $nic = "41601-0693838-6";
-            echo $nic;
             $auth = self::actionLogin();
-            print_r($auth);
             $responseData = self::actionDataByCnic($auth, $nic);
             print_r($responseData);
             die();
