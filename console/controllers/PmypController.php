@@ -42,29 +42,29 @@ class PmypController extends Controller
     {
         $curl = curl_init();
 
-//        curl_setopt_array($curl, array(
-//            CURLOPT_URL => 'https://api.pmyp.gov.pk/users/authenticate',
-//            CURLOPT_RETURNTRANSFER => true,
-//            CURLOPT_ENCODING => '',
-//            CURLOPT_MAXREDIRS => 10,
-//            CURLOPT_TIMEOUT => 0,
-//            CURLOPT_FOLLOWLOCATION => true,
-//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//            CURLOPT_CUSTOMREQUEST => 'POST',
-//            CURLOPT_POSTFIELDS =>'{
-//                     "username" : "PMYPAkhuwat",
-//                    "password" : "PMYP^&*Akhuwat#834"
-//              }',
-//            CURLOPT_HTTPHEADER => array(
-//                'Content-Type: application/json',
-//                'Cookie: cookiesession1=678B28EBE73226A4B5FEB6E8F9B7D304'
-//            ),
-//        ));
-//
-//        $response = curl_exec($curl);
-//
-//        curl_close($curl);
-//        echo $response;
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.pmyp.gov.pk/users/authenticate',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>'{
+                     "username" : "PMYPAkhuwat",
+                    "password" : "PMYP^&*Akhuwat#834"
+              }',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Cookie: cookiesession1=678B28EBE73226A4B5FEB6E8F9B7D304'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        echo $response;
 
 
         $body = [
@@ -72,23 +72,38 @@ class PmypController extends Controller
             "password" => 'PMYP^&*Akhuwat#834'
         ];
 
-        print_r($body);
-        $headers = array
-        (
-            'Content-Type: application/json'
-        );
+//        $headers = array
+//        (
+//            'Content-Type: application/json'
+//        );
 
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.pmyp.gov.pk/users/authenticate',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>json_encode($body),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Cookie: cookiesession1=678B28EBE73226A4B5FEB6E8F9B7D304'
+            ),
+        ));
+        $result = curl_exec($curl);
 
-        $ch = curl_init('https://api.pmyp.gov.pk/users/authenticate');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $result = curl_exec($ch);
+//        $ch = curl_init('https://api.pmyp.gov.pk/users/authenticate');
+//        curl_setopt($ch, CURLOPT_POST, true);
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//        $result = curl_exec($ch);
+
 
         print_r($result);
-
 
         $result = json_decode($result);
        
