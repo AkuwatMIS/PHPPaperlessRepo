@@ -63,29 +63,33 @@ class PmypController extends Controller
             ),
         ));
         $response = curl_exec($curl);
-
+        
         if (curl_errno($curl)) {
             $error_msg = curl_error($curl);
-            Yii::error("cURL Error in ApiController::actionAuthenticate: " . $error_msg, __METHOD__);
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['status' => 'error', 'message' => 'API call failed: ' . $error_msg];
+            // In console, log to console output or a file directly
+            $this->stderr("cURL Error: " . $error_msg . "\n"); // Use stderr for errors
+            return self::EXIT_CODE_ERROR; // Indicate an error occurred
         }
 
         $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
 
-        // Log the full response for debugging
-        Yii::info("API Response (HTTP {$http_code}): " . $response, __METHOD__);
+        // Log the full response for debugging (console output)
+        $this->stdout("API Response (HTTP {$http_code}): " . $response . "\n");
 
-        // Decode the JSON response
-        $result = json_decode($response, true);
+        $data = json_decode($response, true);
 
-        if ($http_code === 200 && $result && isset($result['token'])) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['status' => 'success', 'id'=> $result->id,'data' => $result];
+        if ($http_code === 200 && $data && isset($data['token'])) {
+            $this->stdout("Authentication successful!\n");
+            $this->stdout("token: " . $data['token'] . "\n"); // Or whatever data you need
+            $this->stdout("Id: " . $data['id'] . "\n"); // Or whatever data you need
+            // You might return the token or process it further
+            return self::EXIT_CODE_NORMAL;
         } else {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['status' => 'error', 'message' => 'API authentication failed', 'response' => $result, 'http_code' => $http_code];
+            $this->stderr("API authentication failed.\n");
+            $this->stderr("Response: " . print_r($data, true) . "\n");
+            $this->stderr("HTTP Code: " . $http_code . "\n");
+            return self::EXIT_CODE_ERROR;
         }
     }
 

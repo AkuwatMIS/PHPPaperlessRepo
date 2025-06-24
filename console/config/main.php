@@ -31,7 +31,10 @@ return [
             'identityClass' => 'common\models\User',
             'enableSession' => false,
             'enableAutoLogin' => true,
-        ]
+        ],
+        'session' => [
+            'class' => 'yii\web\Session'
+        ],
     ],
     'params' => $params,
 ];
