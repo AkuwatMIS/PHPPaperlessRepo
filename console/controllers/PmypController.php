@@ -167,8 +167,9 @@ class PmypController extends Controller
 
         } elseif ($type == 'get') {
             $nic = "41601-0693838-6";
-
+            echo $nic;
             $auth = self::actionLogin();
+            print_r($auth);
             $responseData = self::actionDataByCnic($auth, $nic);
             print_r($responseData);
             die();
