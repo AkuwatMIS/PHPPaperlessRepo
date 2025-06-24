@@ -50,6 +50,8 @@ class PmypController extends Controller
             CURLOPT_TIMEOUT => 0,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS =>'{
                      "username" : "PMYPAkhuwat",
@@ -62,16 +64,29 @@ class PmypController extends Controller
         ));
         $response = curl_exec($curl);
 
-        print_r($response);
+        if (curl_errno($curl)) {
+            $error_msg = curl_error($curl);
+            Yii::error("cURL Error in ApiController::actionAuthenticate: " . $error_msg, __METHOD__);
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['status' => 'error', 'message' => 'API call failed: ' . $error_msg];
+        }
 
-        $result = json_decode($response);
-       
-        $response = [
-            'success' => true,
-            'id' => $result->id,
-            'token' => $result->token,
-        ];
-        return $response;
+        $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        // Log the full response for debugging
+        Yii::info("API Response (HTTP {$http_code}): " . $response, __METHOD__);
+
+        // Decode the JSON response
+        $result = json_decode($response, true);
+
+        if ($http_code === 200 && $result && isset($result['token'])) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['status' => 'success', 'id'=> $result->id,'data' => $result];
+        } else {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['status' => 'error', 'message' => 'API authentication failed', 'response' => $result, 'http_code' => $http_code];
+        }
     }
 
     public function actionDataByCnic($auth, $nic)
