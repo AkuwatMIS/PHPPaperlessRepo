@@ -1365,7 +1365,7 @@ class ApplicationsSearch extends Applications
         }
     }
 
-    public function visitsConstructionCompletedApprovalList($params, $export = false)
+    public function oldvisitsConstructionCompletedApprovalList($params, $export = false)
     {
         $query = Applications::find()
             ->alias('applications')
@@ -1449,6 +1449,92 @@ class ApplicationsSearch extends Applications
             return $dataProvider;
         }
     }
+
+    public function visitsConstructionCompletedApprovalList($params, $export = false)
+    {
+        $subQuery = (new \yii\db\Query())
+            ->select(['parent_id', 'MAX(id) AS last_visit_id'])
+            ->from('visits')
+            ->where([
+                'percent' => 100,
+                'construction_verified_by' => 0,
+                'deleted' => 0,
+                'created_by' => 6174,
+            ])
+            ->groupBy('parent_id');
+
+        $query = Applications::find()
+            ->alias('applications')
+            ->select(['applications.*', 'visits.id AS visit_id', 'visits.is_shifted AS is_shifted'])
+            ->innerJoin(['latest_visits' => $subQuery], 'latest_visits.parent_id = applications.id')
+            ->innerJoin('visits', 'visits.id = latest_visits.last_visit_id')
+            ->joinWith(['member', 'memberAccount']) // assuming these relations exist
+            ->where([
+                'applications.deleted' => 0,
+                'applications.project_id' => 132,
+            ])
+            ->andWhere(['>', 'applications.recommended_amount', 0])
+            ->andWhere(['not in', 'applications.status', ['rejected']]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $dataProvider->setSort([
+            'attributes' => [
+                'project_id' => [
+                    'asc' => ['applications.project_id' => SORT_ASC],
+                    'desc' => ['applications.project_id' => SORT_DESC],
+                    'default' => SORT_ASC
+                ],
+                'full_name' => [
+                    'asc' => ['members.full_name' => SORT_ASC],
+                    'desc' => ['members.full_name' => SORT_DESC],
+                    'default' => SORT_ASC
+                ],
+                'cnic' => [
+                    'asc' => ['members.cnic' => SORT_ASC],
+                    'desc' => ['members.cnic' => SORT_DESC],
+                    'default' => SORT_ASC
+                ],
+                'status' => [
+                    'asc' => ['members_account.status' => SORT_ASC],
+                    'desc' => ['members_account.status' => SORT_DESC],
+                    'default' => SORT_ASC
+                ],
+            ]
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'applications.id' => $this->id,
+            'application_no' => $this->application_no,
+            'members.cnic' => $this->cnic,
+            'applications.branch_id' => $this->branch_id,
+            'applications.area_id' => $this->area_id,
+            'applications.region_id' => $this->region_id,
+        ]);
+
+        $query->andFilterWhere(['like', 'members.full_name', $this->full_name])
+            ->andFilterWhere(['like', 'members.parentage', $this->parentage]);
+
+        if (!is_null($this->application_date) && strpos($this->application_date, ' - ') !== false) {
+            $date = explode(' - ', $this->application_date);
+            $start = strtotime($date[0]);
+            $end = strtotime($date[1] . ' 23:59:59');
+            $query->andFilterWhere(['between', 'applications.application_date', $start, $end]);
+        } else {
+            $query->andFilterWhere(['applications.application_date' => $this->application_date]);
+        }
+
+        return $export ? $query : $dataProvider;
+    }
+
 
     public function searchVisitsImages($params)
     {
