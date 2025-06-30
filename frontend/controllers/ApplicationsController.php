@@ -1502,7 +1502,13 @@ class ApplicationsController extends Controller
                 $visits_detail[$i]['area_name'] = isset($g['area']['name']) ? $g['area']['name'] : '';
                 $visits_detail[$i]['Site_Engineer_Name'] = isset($g['lastVisit']['user']['username']) ? $g['lastVisit']['user']['username'] : '';
                 $visits_detail[$i]['percent'] = isset($g['lastVisit']['percent']) ? "'" . $g['lastVisit']['percent'] . "'" : '';
-                $visits_detail[$i]['visited_at'] = date("d-M-y", isset($g['lastVisit']['created_at']) ? $g['lastVisit']['created_at'] : '');
+                //$visits_detail[$i]['visited_at'] = date("d-M-y", isset($g['lastVisit']['created_at']) ? $g['lastVisit']['created_at'] : '');
+                $visits_detail[$i]['visited_at'] = date(
+                    "d-M-y",
+                    isset($g['lastVisit']['created_at'])
+                        ? strtotime($g['lastVisit']['created_at'])
+                        : null
+                );
                 $visits_detail[$i]['No_of_visits'] = isset($g['visitsCount']) ? $g['visitsCount'] : '';
                 $visits_detail[$i]['application_no'] = isset($g['application_no']) ? $g['application_no'] : '';
                 $visits_detail[$i]['application_date'] = date("d-M-y", isset($g['application_date']) ? $g['application_date'] : '');
