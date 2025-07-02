@@ -46,7 +46,7 @@ class AwpController extends Controller
     {
         $months = array(
 //            "2024-10" => "2024-10",
-            "2025-05" => "2025-05",
+            "2025-06" => "2025-06",
 //            "2025-04" => "2025-04"
 //            "2023-10" => "2023-10",
 //            "2023-11" => "2023-11",
@@ -235,7 +235,7 @@ class AwpController extends Controller
     public function actionAwpYearly()
     {
         $months = array(
-            "2025-06" => "2025-06",
+//            "2025-06" => "2025-06",
             "2025-07" => "2025-07",
             "2025-08" => "2025-08",
             "2025-09" => "2025-09",
@@ -353,7 +353,6 @@ class AwpController extends Controller
             10 => 0,
             11 => 0,
             12 => 0,
-            13 => 0
         );
 
         // $id = [
@@ -546,7 +545,7 @@ class AwpController extends Controller
     public function actionOverdueThisYear()
     {
         $months = [
-           "2025-05" => "2025-05",
+           "2025-06" => "2025-06",
 //           "2025-04" => "2025-04",
 //           "2024-09" => "2024-09",
 //           "2024-10" => "2024-10",
@@ -2368,12 +2367,12 @@ class AwpController extends Controller
         }
     }
 
-    // php yii awp/recovery-percent
+    //php yii awp/recovery-percent
 
     public function actionRecoveryPercent()
     {
         $months = [
-           "2025-05" => "2025-05",
+           "2025-05" => "2025-06",
 //           "2025-02" => "2025-02",
 //           "2025-03" => "2025-03",
 //            "2025-04" => "2025-04",
