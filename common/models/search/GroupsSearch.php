@@ -863,6 +863,7 @@ class GroupsSearch extends Groups
         $page = Yii::$app->getRequest()->getQueryParam('page');
         $limit = Yii::$app->getRequest()->getQueryParam('limit');
         $order = Yii::$app->getRequest()->getQueryParam('order');
+        $cnic = Yii::$app->getRequest()->getQueryParam('cnic');
 
         $search = Yii::$app->getRequest()->getQueryParam('search');
 
@@ -876,9 +877,12 @@ class GroupsSearch extends Groups
 
         $offset = ($page - 1) * $limit;
 
-        $applications = Applications::find()
-            ->join('inner join','application_actions','application_actions.parent_id=applications.id')
-            ->join('inner join','group_actions','group_actions.parent_id=applications.group_id')
+        $modelApp = Applications::find()
+            ->join('inner join','application_actions','application_actions.parent_id=applications.id');
+            if(isset($cnic) && !empty($cnic)){
+                $modelApp->join('inner join','members','members.id=applications.member_id');
+            }
+            $modelApp->join('inner join','group_actions','group_actions.parent_id=applications.group_id')
             ->leftJoin('loans','loans.application_id = applications.id')
             ->where(['application_actions.action'=>'group_formation','application_actions.status'=>1])
             ->andWhere(['>=','application_actions.expiry_date', strtotime('now')])
@@ -888,23 +892,34 @@ class GroupsSearch extends Groups
             ->andWhere(['in','applications.project_id',StructureHelper::trancheInProjects()])
             ->andWhere(['<>','applications.group_id',0])
             ->andWhere(['applications.recommended_amount' => 0])
-            ->andWhere(['=','applications.branch_id',$params['branch_id']])
-            ->orderBy('applications.updated_at desc')
-            /*->limit(10)*/
-            ->all();
+            ->andWhere(['=','applications.branch_id',$params['branch_id']]);
+                 if(isset($cnic) && !empty($cnic)){
+                     $modelApp->andWhere(['=','members.cnic',$cnic]);
+                 }
 
-        $tranch_applications = Applications::find()
-            ->leftJoin('loans','loans.application_id = applications.id')
-            ->join('inner join','loan_tranches','loans.id= loan_tranches.loan_id')
+            /*->limit(10)*/
+
+
+            $applications = $modelApp->orderBy('applications.updated_at desc')->all();
+
+        $modelAppTranche = Applications::find()
+            ->leftJoin('loans','loans.application_id = applications.id');
+            if(isset($cnic) && !empty($cnic)){
+                $modelAppTranche->join('inner join','members','members.id=applications.member_id');
+            }
+            $modelAppTranche->join('inner join','loan_tranches','loans.id= loan_tranches.loan_id')
             ->where(['loans.status' => 'collected','loans.deleted'=>0, 'loan_tranches.status' =>1])
             ->andWhere(['applications.status'=>'approved'])
             ->andWhere(['in','applications.project_id',StructureHelper::trancheInProjects()])
             ->andWhere(['<>','applications.group_id',0])
             ->andWhere(['>','applications.recommended_amount', 0])
-            ->andWhere(['=','applications.branch_id',$params['branch_id']])
-            ->orderBy('applications.updated_at desc')
+            ->andWhere(['=','applications.branch_id',$params['branch_id']]);
+            if(isset($cnic) && !empty($cnic)){
+                $modelAppTranche->andWhere(['=','members.cnic',$cnic]);
+            }
+
             /*->limit(10)*/
-            ->all();
+            $tranch_applications = $modelAppTranche->orderBy('applications.updated_at desc')->all();
 
         $applications = array_merge($applications,$tranch_applications);
 
@@ -1000,6 +1015,7 @@ class GroupsSearch extends Groups
         $page = Yii::$app->getRequest()->getQueryParam('page');
         $limit = Yii::$app->getRequest()->getQueryParam('limit');
         $order = Yii::$app->getRequest()->getQueryParam('order');
+        $cnic = Yii::$app->getRequest()->getQueryParam('cnic');
 
         $search = Yii::$app->getRequest()->getQueryParam('search');
 
@@ -1013,9 +1029,12 @@ class GroupsSearch extends Groups
 
         $offset = ($page - 1) * $limit;
 
-        $applications = Applications::find()
-            ->join('inner join','application_actions','application_actions.parent_id=applications.id')
-            ->join('inner join','group_actions','group_actions.parent_id=applications.group_id')
+        $modelApp = Applications::find()
+            ->join('inner join','application_actions','application_actions.parent_id=applications.id');
+            if(isset($cnic) && !empty($cnic)){
+                $modelApp->join('inner join','members','members.id=applications.member_id');
+            }
+            $modelApp->join('inner join','group_actions','group_actions.parent_id=applications.group_id')
             ->leftJoin('loans','loans.application_id = applications.id')
             ->where(['application_actions.action'=>'group_formation','application_actions.status'=>1])
             //->andWhere(['>=','application_actions.expiry_date', strtotime('now')])
@@ -1025,10 +1044,12 @@ class GroupsSearch extends Groups
             ->andWhere(['in','applications.project_id',StructureHelper::trancheProjects()])
             ->andWhere(['<>','applications.group_id',0])
             ->andWhere(['<>','applications.recommended_amount',0])
-            ->andWhere(['=','applications.branch_id',$params['branch_id']])
-            ->orderBy('applications.updated_at desc')
+            ->andWhere(['=','applications.branch_id',$params['branch_id']]);
+            if(isset($cnic) && !empty($cnic)){
+                $modelApp->andWhere(['=','members.cnic',$cnic]);
+            }
             /*->limit(10)*/
-            ->all();
+            $applications = $modelApp->orderBy('applications.updated_at desc')->all();
 
         $groups_list = array();
         foreach ($applications as $application){
