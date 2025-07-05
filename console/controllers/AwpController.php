@@ -386,7 +386,7 @@ class AwpController extends Controller
         //     29,
         //     30,
         // ];
-        $date = date('Y-05-t', strtotime('last day of previous month'));
+        $date = date('Y-06-t', strtotime('last day of previous month'));
 
         $branches = Branches::find()->where(['status' => 1])
 //            ->andWhere(['in','id',$id])
@@ -717,9 +717,6 @@ class AwpController extends Controller
 
 
         } else if ($inst > 11 && $inst <= 12) {
-            $closed_loans_month_wise[11][$project_id] = $closed_loans_month_wise[11][$project_id] + 1;
-
-        } else if ($inst > 12 && $inst <= 13) {
             $closed_loans_month_wise[11][$project_id] = $closed_loans_month_wise[11][$project_id] + 1;
 
         }
