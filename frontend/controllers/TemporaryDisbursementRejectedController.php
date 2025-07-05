@@ -241,7 +241,7 @@ class TemporaryDisbursementRejectedController extends Controller
                 $tranche_reject = LoanTranches::find()->where(['loan_id' => $loan->id])
                     ->andWhere(['tranch_no'=> $model->tranche_no])
                     ->one();
-                if(in_array($tranche_reject->status,[6,8])){
+                if(in_array($tranche_reject->status,[6,8,4])){
                     if($tranche_reject->tranch_no == 1){
                         $loan->disbursed_amount = 0;
                         $loan->date_disbursed = 0;
@@ -249,7 +249,7 @@ class TemporaryDisbursementRejectedController extends Controller
                     }else{
                         $loan->disbursed_amount = $loan->disbursed_amount-$tranche_reject->tranch_amount;
                     }
-                    if($loan->save()){
+                    if($loan->save(false)){
                         $tranche_reject->status = 3;
                         $tranche_reject->cheque_no = 0;
                         $tranche_reject->fund_request_id = 0;
