@@ -273,7 +273,7 @@ class AwpController extends Controller
             foreach ($branch_projects as $proj) {
                 foreach ($months as $month) {
 
-                    if ($month == "2025-06") {
+                    if ($month == "2025-07") {
                         $awp = new Awp();
                         $awp->branch_id = $branch['id'];
                         $awp->region_id = $branch['region_id'];
