@@ -371,7 +371,7 @@ class AwpController extends Controller
                     $loans = Loans::find()
                         ->select(['loans.id', 'loans.loan_amount', 'loans.inst_amnt', '(select COALESCE(sum(amount),0) from recoveries where recoveries.loan_id=loans.id and recoveries.deleted=0 and receive_date <= "' . strtotime($date) . '") as credit'])
                         ->where(['branch_id' => $b->id, 'project_id' => $p->project_id, 'deleted' => 0])
-                        ->andWhere(['or', ['status' => 'collected'], ['and', ['status' => 'loan completed'], ['>=', 'loan_completed_date', '1688151599']]])
+                        ->andWhere(['or', ['status' => 'collected'], ['and', ['status' => 'loan completed'], ['>=', 'loan_completed_date', '1751309999']]])
                         ->asArray()
                         ->all();
                     foreach ($loans as $loan) {
