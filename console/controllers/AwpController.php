@@ -355,37 +355,6 @@ class AwpController extends Controller
             12 => 0,
         );
 
-        // $id = [
-        //     1,
-        //     2,
-        //     3,
-        //     4,
-        //     5,
-        //     6,
-        //     7,
-        //     8,
-        //     9,
-        //     10,
-        //     11,
-        //     12,
-        //     13,
-        //     14,
-        //     15,
-        //     16,
-        //     17,
-        //     19,
-        //     20,
-        //     21,
-        //     22,
-        //     23,
-        //     24,
-        //     25,
-        //     26,
-        //     27,
-        //     28,
-        //     29,
-        //     30,
-        // ];
         $date = date('Y-06-t', strtotime('last day of previous month'));
 
         $branches = Branches::find()->where(['status' => 1])
@@ -412,7 +381,7 @@ class AwpController extends Controller
                         $closed_loans_month_wise = $this->GetActiveLoansYearly($inst, $closed_loans_month_wise);
                     }
 
-                    $awp = Awp::find()->where(['branch_id' => $b->id, 'project_id' => $p->project_id])->andWhere(['>', 'month', '2023-05'])->orderBy('month ASC')->all();
+                    $awp = Awp::find()->where(['branch_id' => $b->id, 'project_id' => $p->project_id])->andWhere(['>', 'month', '2025-06'])->orderBy('month ASC')->all();
                     foreach ($awp as $key => $a) {
                         echo '----'.$a->monthly_closed_loans.'-----';
                         $a->monthly_closed_loans = $closed_loans_month_wise[$key + 1];
