@@ -401,8 +401,8 @@ class BankAccountsController extends Controller
             $loan = Loans::find()->where(['id' => $loan_tranche->loan_id])->one();
             if(!empty($loan) && $loan!=null){
                 $tranchesAmountSum = LoanTranches::find()
-                    ->where(['loan_id' => $loan->id])
-                    ->where(['status' => 6])
+                    ->where(['loan_id' => $loan_tranche->id])
+                    ->andWhere(['status' => 6])
                     ->sum('tranch_amount');
             }
             $loan->status = 'collected';
