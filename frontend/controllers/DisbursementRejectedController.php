@@ -9,6 +9,7 @@ use common\models\DisbursementDetails;
 use common\models\Disbursements;
 use common\models\Loans;
 use common\models\LoanTranches;
+use common\models\Recoveries;
 use common\models\search\GlobalsSearch;
 use Yii;
 use common\models\DisbursementRejected;
@@ -308,6 +309,16 @@ class DisbursementRejectedController extends Controller
                 return $this->redirect(['index']);
             }
         }
+
+        $recoveriesList = Recoveries::find()
+            ->where(['loan_id' => $loan->id])
+            ->all();
+
+        foreach ($recoveriesList as $recovery) {
+            $recovery->deleted = 1;
+            $recovery->save(false);
+        }
+
 
         // Update loan
         $loan->status = 'rejected';

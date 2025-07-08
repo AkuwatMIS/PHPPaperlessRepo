@@ -52,6 +52,8 @@ class AcagHelper
                 $recoveryAmount = $amount;
                 $isCompleted = ($visit->percent == 100) ? true : false;
                 $percent = $visit->percent;
+            }elseif ($Status =='Loan Rejected'){
+                $recoveryAmount = 0;
             } else {
                 $visit = Visits::find()->where(['parent_type' => 'application'])
                     ->andWhere(['parent_id' => $loan->application_id])
