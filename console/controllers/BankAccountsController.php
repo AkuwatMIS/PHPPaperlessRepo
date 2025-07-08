@@ -403,7 +403,7 @@ class BankAccountsController extends Controller
                 $tranchesAmountSum = LoanTranches::find()
                     ->where(['loan_id' => $loan_tranche->id])
                     ->andWhere(['status' => 6])
-                    ->sum('tranch_amount');
+                    ->sum('amount');
             }
             $loan->status = 'collected';
             $loan->disbursed_amount = $tranchesAmountSum;
