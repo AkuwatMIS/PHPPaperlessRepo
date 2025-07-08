@@ -399,8 +399,14 @@ class BankAccountsController extends Controller
             $loan_tranche->updated_by = 1;
             $loan_tranche->save();
             $loan = Loans::find()->where(['id' => $loan_tranche->loan_id])->one();
+            if(!empty($loan) && $loan!=null){
+                $tranchesAmountSum = LoanTranches::find()
+                    ->where(['loan_id' => $loan->id])
+                    ->where(['status' => 6])
+                    ->sum('tranch_amount');
+            }
             $loan->status = 'collected';
-            $loan->disbursed_amount = $loan->disbursed_amount + $loan_tranche->tranch_amount;
+            $loan->disbursed_amount = $tranchesAmountSum;
             $loan->updated_by=1;
             $loan->save();
 

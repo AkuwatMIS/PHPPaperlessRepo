@@ -2777,7 +2777,7 @@ ORDER BY
 
     }
 
-    // nohup php yii extract-data/active-loans-detail-olp 2024-07-26
+    // nohup php yii extract-data/active-loans-detail-olp 2025-07-07
 
     public function actionActiveLoansDetailOlp($date)
     {
