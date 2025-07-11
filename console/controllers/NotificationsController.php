@@ -89,7 +89,7 @@ class NotificationsController extends Controller
         $status = ['collected','loan completed'];
         $date = date("Y-m-d", strtotime("+1 month"));
 
-        $subQuery = "(SELECT member_id, members_phone 
+        $subQuery = "(SELECT member_id, phone 
                FROM members_phone 
                WHERE is_current = 1 AND phone_type = 'Mobile') AS phone_sub";
 
