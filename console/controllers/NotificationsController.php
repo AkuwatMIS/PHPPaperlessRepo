@@ -96,8 +96,6 @@ class NotificationsController extends Controller
         $query = Members::find()
             ->select([
                 'members.id',
-                'members.full_name',
-                'members.parentage',
                 'members.cnic',
                 'member_info.cnic_expiry_date',
                 'phone_sub.phone'
@@ -113,15 +111,13 @@ class NotificationsController extends Controller
             ->asArray()
             ->all();
 
-        print_r($query);
-        die();
-
         foreach ($query as $q) {
 
-            $mobile = $q->phone ?? null;
+            $mobile = $q['phone'] ?? null;
+            $cnic = $q['cnic'] ?? null;
 
-            if ($mobile) {
-                $msg = "Your CNIC is one month to expired . Please update it.";
+            if ($mobile && $cnic) {
+                $msg = "Your CNIC '$cnic' is one month to expired . Please update it.";
 
                 echo $mobile;
                 echo '-----';
@@ -132,7 +128,7 @@ class NotificationsController extends Controller
 
                 $sms_log = new SmsLogs();
 
-                $sms_log->member_id = $q->id;
+                $sms_log->member_id = $q['id'];
                 $sms_log->phone = $mobile;
                 $sms_log->message = $msg;
                 $sms_log->sent_at = date('Y-m-d H:i:s');
