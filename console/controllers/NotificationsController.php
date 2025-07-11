@@ -54,6 +54,8 @@ class NotificationsController extends Controller
 
     }
 
+
+
     public function actionSendBackup()
     {
 
@@ -81,20 +83,65 @@ class NotificationsController extends Controller
 
     }
 
+    // php yii notifications/notify-borrower
     public function actionNotifyBorrower()
     {
-        $status = 'collected';
+        $status = ['collected','loan completed'];
         $date = date("Y-m-d", strtotime("+1 month"));
 
-        $query = Members::find()->select(['members.id', 'members.full_name', 'members.parentage', 'members.parentage_type', 'members.cnic',
-            'members.gender', 'members.dob', 'members.education', 'members.marital_status', 'members.status', 'members.is_lock', 'members.religion', 'members.created_at',
-            'members.region_id', 'members.area_id', 'members.branch_id', 'members.team_id', 'members.field_id'
+        $subQuery = "(SELECT member_id, members_phone 
+               FROM members_phone 
+               WHERE is_current = 1 AND phone_type = 'Mobile') AS phone_sub";
+
+        $query = Members::find()
+            ->select([
+                'members.id',
+                'members.full_name',
+                'members.parentage',
+                'members.cnic',
+                'member_info.cnic_expiry_date',
+                'phone_sub.phone'
             ])
-            ->innerJoin('member_info', 'member_info.member_id=members.id')
-            ->innerJoin('applications', 'applications.member_id=members.id')
-            ->innerJoin('loans', 'loans.application_id=applications.id')
-            ->where('DATE(member_info.cnic_expiry_date) <= DATE("' . $date . '")')
-            ->andWhere(['=', 'loans.status', $status])
-            ->get();
+            ->innerJoin('member_info', 'member_info.member_id = members.id')
+            ->innerJoin($subQuery, 'phone_sub.member_id = members.id')
+            ->innerJoin('applications', 'applications.member_id = members.id')
+            ->innerJoin('loans', 'loans.application_id = applications.id')
+            ->where(['<=', 'DATE(member_info.cnic_expiry_date)', new \yii\db\Expression('DATE("' . $date . '")')])
+            ->andWhere(['in', 'loans.status', [$status]])
+            ->all();
+
+        foreach ($query as $q) {
+            $mobile = $q->phone ?? null;
+
+            if ($mobile && preg_match('/^\d{11}$/', $mobile)) {
+                $msg = "Your CNIC is one month to expired . Please update it.";
+
+                echo $mobile;
+                echo '-----';
+                echo $msg;
+                die();
+
+                $sms = SmsHelper::Sendsms($mobile, $msg);
+
+                $sms_log = new SmsLogs();
+
+                $sms_log->member_id = $q->id;
+                $sms_log->phone = $mobile;
+                $sms_log->message = $msg;
+                $sms_log->sent_at = date('Y-m-d H:i:s');
+
+                if (isset($sms->corpsms[0]->type) && $sms->corpsms[0]->type === 'Success') {
+                    $sms_log->status = 1;
+                    $sms_log->sent_count = ($sms_log->sent_count ?? 0) + 1;
+                } else {
+                    $sms_log->status = 2;
+                }
+
+                $sms_log->save(false); // Use save(true) if validation is needed
+            } else {
+                // Optionally log or skip invalid numbers
+                continue;
+            }
+        }
     }
 }
