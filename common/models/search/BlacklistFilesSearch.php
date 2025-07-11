@@ -67,6 +67,9 @@ class BlacklistFilesSearch extends BlacklistFiles
             ->andFilterWhere(['like', 'result_file_name', $this->result_file_name])
             ->andFilterWhere(['like', 'status', $this->status]);
 
+        $query->orderBy(['id' => SORT_DESC]);
+
+
         return $dataProvider;
     }
 }
