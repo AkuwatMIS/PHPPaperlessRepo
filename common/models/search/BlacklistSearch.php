@@ -81,6 +81,7 @@ class BlacklistSearch extends Blacklist
 
                 // Build OR conditions
                 if (!empty($names)) {
+                    echo '<pre>';
                     print_r($names);
 
                     $orConditions = ['or'];
