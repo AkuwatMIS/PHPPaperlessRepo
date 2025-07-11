@@ -82,14 +82,18 @@ class BlacklistSearch extends Blacklist
                 // Build OR conditions
                 if (!empty($names)) {
                     print_r($names);
-                    die();
+
                     $orConditions = ['or'];
                     foreach ($names as $n) {
                         $orConditions[] = ['like', 'name', $n];
                     }
 
+                    print_r($orConditions);
                     // IMPORTANT: use andWhere instead of andFilterWhere
-                    $query->andWhere($orConditions);
+                    $query = $query->andWhere($orConditions);
+
+                    print_r($query);
+                    die();
                 }
             }
 
