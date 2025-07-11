@@ -76,10 +76,8 @@ class BlacklistSearch extends Blacklist
             ->andFilterWhere(['like', 'province', $this->province])
             ->andFilterWhere(['!=', 'reason', 'write-off']);
             if (!empty($this->name)) {
-                // Only split on spaces
                 $names = explode(' ', $this->name);
 
-                // Remove empty values (e.g., due to double spaces)
                 $filteredNames = [];
                 foreach ($names as $n) {
                     $n = trim($n);
