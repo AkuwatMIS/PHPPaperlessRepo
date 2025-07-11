@@ -110,6 +110,7 @@ class NotificationsController extends Controller
             ->andWhere(['in', 'loans.status', $status])
             ->groupBy('members.id')
             ->limit(10)
+            ->asArray()
             ->all();
 
         foreach ($query as $q) {
