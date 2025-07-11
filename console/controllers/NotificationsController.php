@@ -112,10 +112,11 @@ class NotificationsController extends Controller
             ->limit(10)
             ->all();
 
-        print_r($query);
-        die();
-
         foreach ($query as $q) {
+
+            print_r($q);
+            die();
+
             $mobile = $q->phone ?? null;
 
             if ($mobile && preg_match('/^\d{11}$/', $mobile)) {
