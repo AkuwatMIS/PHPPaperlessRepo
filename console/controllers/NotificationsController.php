@@ -113,6 +113,9 @@ class NotificationsController extends Controller
             ->asArray()
             ->all();
 
+        print_r($query);
+        die();
+
         foreach ($query as $q) {
 
             $mobile = $q->phone ?? null;
