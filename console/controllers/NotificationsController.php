@@ -115,9 +115,10 @@ class NotificationsController extends Controller
 
             $mobile = $q['phone'] ?? null;
             $cnic = $q['cnic'] ?? null;
+            $cnic_expiry_date = $q['cnic_expiry_date'] ?? null;
 
             if ($mobile && $cnic) {
-                $msg = "Your CNIC '$cnic' is one month to expired . Please update it.";
+                $msg = "Your CNIC '$cnic' is one month to expired, Expiry date is $cnic_expiry_date, Please update to stay Active!.";
 
                 echo $mobile;
                 echo '-----';
