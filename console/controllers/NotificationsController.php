@@ -107,7 +107,7 @@ class NotificationsController extends Controller
             ->innerJoin('applications', 'applications.member_id = members.id')
             ->innerJoin('loans', 'loans.application_id = applications.id')
             ->where(['<=', 'DATE(member_info.cnic_expiry_date)', new \yii\db\Expression('DATE("' . $date . '")')])
-            ->andWhere(['in', 'loans.status', [$status]])
+            ->andWhere(['in', 'loans.status', $status])
             ->all();
 
         foreach ($query as $q) {
