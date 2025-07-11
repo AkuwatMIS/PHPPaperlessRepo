@@ -108,7 +108,12 @@ class NotificationsController extends Controller
             ->innerJoin('loans', 'loans.application_id = applications.id')
             ->where('DATE(member_info.cnic_expiry_date) = DATE("'.$date.'")')
             ->andWhere(['in', 'loans.status', $status])
+            ->groupBy('members.id')
+            ->limit(10)
             ->all();
+
+        print_r($query);
+        die();
 
         foreach ($query as $q) {
             $mobile = $q->phone ?? null;
