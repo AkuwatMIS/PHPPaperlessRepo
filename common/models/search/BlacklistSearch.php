@@ -75,25 +75,25 @@ class BlacklistSearch extends Blacklist
             ->andFilterWhere(['like', 'type', $this->type])
             ->andFilterWhere(['like', 'province', $this->province])
             ->andFilterWhere(['!=', 'reason', 'write-off']);
-
-        if (!empty($this->name)) {
-            // Remove number-dot prefixes like "1.John", "2.Jane"
-            $cleaned = preg_replace('/\d+\./', '', $this->name);
-
-            // Split into words based on space or comma
-            $names = preg_split('/[\s,]+/', $cleaned, -1, PREG_SPLIT_NO_EMPTY);
-
-            // Build OR conditions
-            $orConditions = ['or'];
-            foreach ($names as $n) {
-                $orConditions[] = ['like', 'name', $n];
-            }
-
-            // Apply to query
-            if (count($orConditions) > 1) {
-                $query->andWhere($orConditions);
-            }
-        }
+        $query->andFilterWhere(['or', ['like', 'name', 'Ali'], ['like', 'name', 'Ahmed']]);
+//        if (!empty($this->name)) {
+//            // Remove number-dot prefixes like "1.John", "2.Jane"
+//            $cleaned = preg_replace('/\d+\./', '', $this->name);
+//
+//            // Split into words based on space or comma
+//            $names = preg_split('/[\s,]+/', $cleaned, -1, PREG_SPLIT_NO_EMPTY);
+//
+//            // Build OR conditions
+//            $orConditions = ['or'];
+//            foreach ($names as $n) {
+//                $orConditions[] = ['like', 'name', $n];
+//            }
+//
+//            // Apply to query
+//            if (count($orConditions) > 1) {
+//                $query->andFilterWhere($orConditions);
+//            }
+//        }
 
         if($export){
             return $query;
