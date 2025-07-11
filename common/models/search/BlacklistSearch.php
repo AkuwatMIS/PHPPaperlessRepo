@@ -75,6 +75,16 @@ class BlacklistSearch extends Blacklist
             ->andFilterWhere(['like', 'type', $this->type])
             ->andFilterWhere(['like', 'province', $this->province])
             ->andFilterWhere(['!=', 'reason', 'write-off']);
+
+        if (!empty($this->name)) {
+            $names = preg_split('/[\s,]+/', $this->name, -1, PREG_SPLIT_NO_EMPTY);
+            $orConditions = ['or'];
+            foreach ($names as $n) {
+                $orConditions[] = ['like', 'name', $n];
+            }
+            $query->andWhere($orConditions);
+        }
+
         if($export){
             return $query;
         }else{
