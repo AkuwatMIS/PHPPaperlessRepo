@@ -76,18 +76,25 @@ class BlacklistSearch extends Blacklist
             ->andFilterWhere(['like', 'province', $this->province])
             ->andFilterWhere(['!=', 'reason', 'write-off']);
             if (!empty($this->name)) {
-                // Split the name string into parts
-                $names = preg_split('/[\s,]+/', $this->name, -1, PREG_SPLIT_NO_EMPTY);
+                // Only split on spaces
+                $names = explode(' ', $this->name);
 
-                // Build OR conditions
-                if (!empty($names)) {
+                // Remove empty values (e.g., due to double spaces)
+                $filteredNames = [];
+                foreach ($names as $n) {
+                    $n = trim($n);
+                    if ($n !== '') {
+                        $filteredNames[] = $n;
+                    }
+                }
 
+                if (!empty($filteredNames)) {
                     $orConditions = ['or'];
-                    foreach ($names as $n) {
+                    foreach ($filteredNames as $n) {
                         $orConditions[] = ['like', 'name', $n];
                     }
-                    // IMPORTANT: use andWhere instead of andFilterWhere
-                    $query = $query->andWhere($orConditions);
+
+                    $query->andWhere($orConditions);
                 }
             }
 
