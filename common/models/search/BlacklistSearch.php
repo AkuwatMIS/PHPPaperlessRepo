@@ -95,8 +95,8 @@ class BlacklistSearch extends Blacklist
                     $query->andWhere($orConditions);
                 }
 
-                echo $query->createCommand()->getRawSql();
-                exit;
+              //  echo $query->createCommand()->getRawSql();
+               // exit;
             }
 
         if($export){
