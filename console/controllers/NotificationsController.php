@@ -107,7 +107,6 @@ class NotificationsController extends Controller
             ->where('DATE(member_info.cnic_expiry_date) = DATE("'.$date.'")')
             ->andWhere(['in', 'loans.status', $status])
             ->groupBy('members.id')
-            ->limit(10)
             ->asArray()
             ->all();
 
@@ -120,11 +119,6 @@ class NotificationsController extends Controller
             if ($mobile && $cnic) {
                 $msg = "Your CNIC '$cnic' is one month to expired, Expiry date is $cnic_expiry_date, Please update to stay Active!.";
 
-                echo $mobile;
-                echo '-----';
-                echo $msg;
-                die();
-
                 $sms = SmsHelper::Sendsms($mobile, $msg);
 
                 $sms_log = new SmsLogs();
@@ -132,6 +126,7 @@ class NotificationsController extends Controller
                 $sms_log->member_id = $q['id'];
                 $sms_log->phone = $mobile;
                 $sms_log->message = $msg;
+                $sms_log->sms_type = 'CNIC Expiry Alert!';
                 $sms_log->sent_at = date('Y-m-d H:i:s');
 
                 if (isset($sms->corpsms[0]->type) && $sms->corpsms[0]->type === 'Success') {
