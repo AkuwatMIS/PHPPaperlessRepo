@@ -114,12 +114,9 @@ class NotificationsController extends Controller
 
         foreach ($query as $q) {
 
-            print_r($q);
-            die();
-
             $mobile = $q->phone ?? null;
 
-            if ($mobile && preg_match('/^\d{11}$/', $mobile)) {
+            if ($mobile) {
                 $msg = "Your CNIC is one month to expired . Please update it.";
 
                 echo $mobile;
