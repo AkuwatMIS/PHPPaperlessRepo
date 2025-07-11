@@ -65,7 +65,7 @@ class BlacklistSearch extends Blacklist
         ]);
 
         $query->andFilterWhere(['like', 'cnic', $this->cnic])
-            ->andFilterWhere(['like', 'name', $this->name])
+//            ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'parentage', $this->parentage])
             ->andFilterWhere(['like', 'cnic', $this->cnic])
             ->andFilterWhere(['like', 'cnic_invalid', $this->cnic_invalid])
@@ -81,20 +81,13 @@ class BlacklistSearch extends Blacklist
 
                 // Build OR conditions
                 if (!empty($names)) {
-                    echo '<pre>';
-                    print_r($names);
 
                     $orConditions = ['or'];
                     foreach ($names as $n) {
                         $orConditions[] = ['like', 'name', $n];
                     }
-
-                    print_r($orConditions);
                     // IMPORTANT: use andWhere instead of andFilterWhere
                     $query = $query->andWhere($orConditions);
-
-                    print_r($query);
-                    die();
                 }
             }
 
