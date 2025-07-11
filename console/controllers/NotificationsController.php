@@ -124,11 +124,9 @@ class NotificationsController extends Controller
 
                 $sms_log = new SmsLogs();
 
-                $sms_log->member_id = $q['id'];
-                $sms_log->phone = $mobile;
-                $sms_log->message = $msg;
+                $sms_log->user_id = $q['id'];
+                $sms_log->number = $mobile;
                 $sms_log->sms_type = 'CNIC Expiry Alert!';
-                $sms_log->sent_at = date('Y-m-d H:i:s');
 
                 if (isset($sms->corpsms[0]->type) && $sms->corpsms[0]->type === 'Success') {
                     $sms_log->status = 1;
