@@ -77,12 +77,22 @@ class BlacklistSearch extends Blacklist
             ->andFilterWhere(['!=', 'reason', 'write-off']);
 
         if (!empty($this->name)) {
-            $names = preg_split('/[\s,]+/', $this->name, -1, PREG_SPLIT_NO_EMPTY);
+            // Remove number-dot prefixes like "1.John", "2.Jane"
+            $cleaned = preg_replace('/\d+\./', '', $this->name);
+
+            // Split into words based on space or comma
+            $names = preg_split('/[\s,]+/', $cleaned, -1, PREG_SPLIT_NO_EMPTY);
+
+            // Build OR conditions
             $orConditions = ['or'];
             foreach ($names as $n) {
                 $orConditions[] = ['like', 'name', $n];
             }
-            $query->andWhere($orConditions);
+
+            // Apply to query
+            if (count($orConditions) > 1) {
+                $query->andWhere($orConditions);
+            }
         }
 
         if($export){
