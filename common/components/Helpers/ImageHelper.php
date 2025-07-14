@@ -359,7 +359,9 @@ class ImageHelper{
     public static function getVisitImages($id,$download)
     {
         $images_url = [];
-        $images = Images::find()->where(['parent_type' => 'visits', 'parent_id' => $id])->all();
+        $images = Images::find()
+            ->where(['parent_type' => 'visits', 'parent_id' => $id])
+            ->all();
         foreach ($images as $image)
         {
             $images_url[] = self::getAttachmentApiPath(). '?type='. $image->parent_type . "&id=" . $image->parent_id . "&file_name=" . $image->image_name .'&download='.$download;

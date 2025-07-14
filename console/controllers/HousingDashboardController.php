@@ -469,7 +469,7 @@ class HousingDashboardController extends Controller
     public function actionHousingProjectLoansPushApniChhatApnaGhar()
     {
         $loans_data = [];
-        $applications = 'select m.id as id,
+        $applications = "select m.id as id,
                         applications.id as application_id,
                         applications.req_amount as req_amount,
                         m.full_name as full_name,
@@ -500,32 +500,32 @@ class HousingDashboardController extends Controller
                         l.disbursed_amount,
                         l.sanction_no,
                         l.status,
-                (select coalesce(id,0) from visits where parent_id=applications.id and parent_type="application" 
+                (select coalesce(id,0) from visits where parent_id=applications.id and parent_type='application' 
                        and visits.deleted=0 order by created_at desc limit 1) as loan_visit_id,
-                (select percent from visits where parent_id=applications.id and parent_type="application" 
+                (select percent from visits where parent_id=applications.id and parent_type='application' 
                                and visits.deleted=0 order by created_at desc limit 1) as completion_percent,
-                (select coalesce(count(id),0) from visits where parent_id=applications.id and parent_type="application" 
+                (select coalesce(count(id),0) from visits where parent_id=applications.id and parent_type='application' 
                                and visits.deleted=0) as visits_count,
-                (select created_at from visits where parent_id=applications.id and parent_type="application" 
+                (select created_at from visits where parent_id=applications.id and parent_type='application'
                                and visits.deleted=0  order by created_at desc limit 1) as last_visit_date,
                 (select address from members_address ma where ma.member_id=applications.member_id 
-                               and address_type="business" and is_current=1 limit 1) as address ,
+                               and address_type='business' and is_current=1 limit 1) as address ,
                 (select phone from members_phone mp where mp.member_id=applications.member_id 
-                               and phone_type="mobile" and is_current=1 limit 1) as phone,
+                               and phone_type='mobile' and is_current=1 limit 1) as phone,
                 (select image_name from images i where i.parent_id=applications.member_id 
-                               and parent_type="members" and image_type="profile_pic" limit 1) as profile_pic,
+                               and parent_type='members' and image_type='profile_pic' limit 1) as profile_pic,
                 (select longitude from visits v where v.parent_id=applications.id 
-                               and parent_type="application" and v.longitude > 0 order by created_at desc limit 1) as longitude,
+                               and parent_type='application' and v.longitude > 0 order by created_at desc limit 1) as longitude,
                 (select v1.latitude from visits v1 where v1.parent_id=applications.id 
-                               and v1.parent_type="application" and v1.latitude > 0 order by v1.created_at desc limit 1) as latitude 
+                               and v1.parent_type='application' and v1.latitude > 0 order by v1.created_at desc limit 1) as latitude 
                  from applications 
                  inner join loans l on l.application_id=applications.id 
                  inner join members m on m.id=applications.member_id
                  inner join branches b on b.id=applications.branch_id
                  inner join products p on p.id=applications.product_id
                  inner join activities a on a.id=applications.activity_id
-                 where l.status in ("collected","loan completed")
-              and applications.deleted=0 and applications.project_id=132';
+                 where l.status in ('collected','loan completed')
+              and applications.deleted=0 and applications.project_id=132";
 //        applications.status in ("approved","pending")
 //        and l.status in ("collected","loan completed","rejected","not collected")
 //        AND applications.id=4205458
@@ -581,6 +581,7 @@ class HousingDashboardController extends Controller
             $i++;
         }
 
+        
         echo 'transport started';
         print_r($loans_data);
         die();
