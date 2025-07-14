@@ -525,7 +525,7 @@ class HousingDashboardController extends Controller
                  inner join products p on p.id=applications.product_id
                  inner join activities a on a.id=applications.activity_id
                  where l.status in ('collected','loan completed')
-              and applications.deleted=0 and applications.project_id=132 limit 10";
+              and applications.deleted=0 and applications.project_id=132";
 //        applications.status in ("approved","pending")
 //        and l.status in ("collected","loan completed","rejected","not collected")
 //        AND applications.id=4205458
