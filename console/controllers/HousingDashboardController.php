@@ -520,8 +520,9 @@ class HousingDashboardController extends Controller
                  inner join branches b on b.id=applications.branch_id
                  inner join products p on p.id=applications.product_id
                  inner join activities a on a.id=applications.activity_id
-                 where applications.status in ("approved","pending") 
+                 where l.status in ("collected","loan completed")
               and applications.deleted=0 and applications.project_id=132';
+//        applications.status in ("approved","pending")
 //        and l.status in ("collected","loan completed","rejected","not collected")
 //        AND applications.id=4205458
         $applications = \Yii::$app->db->createCommand($applications)->queryAll();
