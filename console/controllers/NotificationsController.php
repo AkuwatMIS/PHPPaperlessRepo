@@ -86,7 +86,6 @@ class NotificationsController extends Controller
     // php yii notifications/notify-borrower
     public function actionNotifyBorrower()
     {
-        $status = ['collected','loan completed'];
         $date = date("Y-m-d", strtotime("+1 month"));
 
         $subQuery = "(SELECT member_id, phone 
@@ -105,7 +104,7 @@ class NotificationsController extends Controller
             ->innerJoin('applications', 'applications.member_id = members.id')
             ->innerJoin('loans', 'loans.application_id = applications.id')
             ->where('DATE(member_info.cnic_expiry_date) = DATE("'.$date.'")')
-            ->andWhere(['in', 'loans.status', $status])
+            ->andWhere(['loans.status'=> 'collected'])
             ->groupBy('members.id')
             ->asArray()
             ->all();
