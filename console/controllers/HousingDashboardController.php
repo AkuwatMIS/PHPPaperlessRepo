@@ -580,11 +580,7 @@ class HousingDashboardController extends Controller
             $loans_data[$i]['is_shifted'] = $shifted;
             $i++;
         }
-
-
-        echo 'transport started';
-        print_r($loans_data);
-        die();
+        
 
         $headers = array
         (
