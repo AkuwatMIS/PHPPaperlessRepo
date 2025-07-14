@@ -582,6 +582,8 @@ class HousingDashboardController extends Controller
         }
 
         echo 'transport started';
+        print_r($loans_data);
+        die();
 
         $headers = array
         (
