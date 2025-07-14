@@ -500,6 +500,7 @@ class HousingDashboardController extends Controller
                         l.disbursed_amount,
                         l.sanction_no,
                         l.status,
+                        ad.is_shifted,
                 (select coalesce(id,0) from visits where parent_id=applications.id and parent_type='application' 
                        and visits.deleted=0 order by created_at desc limit 1) as loan_visit_id,
                 (select percent from visits where parent_id=applications.id and parent_type='application' 
@@ -524,6 +525,7 @@ class HousingDashboardController extends Controller
                  inner join branches b on b.id=applications.branch_id
                  inner join products p on p.id=applications.product_id
                  inner join activities a on a.id=applications.activity_id
+                 left join application_details ad on ad.parent_id=applications.id and ad.parent_type='application'
                  where l.status in ('collected','loan completed')
               and applications.deleted=0 and applications.project_id=132";
 //        applications.status in ("approved","pending")
@@ -533,7 +535,7 @@ class HousingDashboardController extends Controller
         $i = 0;
         foreach ($applications as $app) {
 
-            $shifted = ApplicationDetails::getShifted($app['application_id']);
+//            $shifted = ApplicationDetails::getShifted($app['application_id']);
 
             $loans_data[$i]['name'] = $app['full_name'];
             $loans_data[$i]['parentage'] = $app['parentage'];
@@ -577,7 +579,7 @@ class HousingDashboardController extends Controller
 //            } else {
                 $loans_data[$i]['visit_images'] = [];
 //            }
-            $loans_data[$i]['is_shifted'] = $shifted;
+            $loans_data[$i]['is_shifted'] =   (!empty($loans_data[$i]['is_shifted']) && $loans_data[$i]['is_shifted'] != null) ? $loans_data[$i]['is_shifted'] : 0;
             $i++;
         }
 
