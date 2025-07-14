@@ -106,8 +106,8 @@ class NotificationsController extends Controller
             ->andWhere(['loans.status'=> 'collected'])
             ->groupBy('members.id')
             ->asArray();
-            echo $query->createCommand()->getRawSql();
-//            ->all();
+//            echo $query->createCommand()->getRawSql();
+            ->all();
 
         foreach ($query as $q) {
 
