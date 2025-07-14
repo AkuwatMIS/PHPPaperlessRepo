@@ -496,6 +496,10 @@ class HousingDashboardController extends Controller
                         b.district_id as district_id,
                         b.province_id as province_id,
                         applications.id as application_id,
+                        l.loan_amount,
+                        l.disbursed_amount,
+                        l.sanction_no,
+                        l.status,
                 (select coalesce(id,0) from visits where parent_id=applications.id and parent_type="application" 
                        and visits.deleted=0 order by created_at desc limit 1) as loan_visit_id,
                 (select percent from visits where parent_id=applications.id and parent_type="application" 
@@ -515,7 +519,7 @@ class HousingDashboardController extends Controller
                 (select v1.latitude from visits v1 where v1.parent_id=applications.id 
                                and v1.parent_type="application" and v1.latitude > 0 order by v1.created_at desc limit 1) as latitude 
                  from applications 
-                 left join loans l on l.application_id=applications.id 
+                 inner join loans l on l.application_id=applications.id 
                  inner join members m on m.id=applications.member_id
                  inner join branches b on b.id=applications.branch_id
                  inner join products p on p.id=applications.product_id
@@ -562,18 +566,10 @@ class HousingDashboardController extends Controller
             $loans_data[$i]['latitude'] = isset($app['latitude']) && !empty($app['latitude']) && $app['latitude'] != null ? $app['latitude'] : 0;
             $loans_data[$i]['province'] = !empty($app['province_id']) ? $app['province_id'] : 0;
             $loans_data[$i]['completion_percent'] = !empty($app['completion_percent']) ? $app['completion_percent'] : 0;
-            $loan = Loans::find()->where(['application_id' => $app['application_id'], 'deleted' => 0])->one();
-            if (!empty($loan)) {
-                $loans_data[$i]['loan_amount'] = $loan->loan_amount;
-                $loans_data[$i]['disbursed_amount'] = $loan->disbursed_amount;
-                $loans_data[$i]['sanction_no'] = $loan->sanction_no;
-                $loans_data[$i]['status'] = $loan->status;
-            } else {
-                $loans_data[$i]['loan_amount'] = !empty($app['req_amount']) ? $app['req_amount'] : 0;
-                $loans_data[$i]['disbursed_amount'] = 0;
-                $loans_data[$i]['sanction_no'] = '';
-                $loans_data[$i]['status'] = 'application';
-            }
+            $loans_data[$i]['loan_amount'] = $app['loan_amount'];
+            $loans_data[$i]['disbursed_amount'] = $app['disbursed_amount'];
+            $loans_data[$i]['sanction_no'] = $app['sanction_no'];
+            $loans_data[$i]['status'] = $app['status'];
             $loans_data[$i]['visits_count'] = !empty($app['visits_count']) ? $app['visits_count'] : 0;
             $loans_data[$i]['last_visit_date'] = !empty($app['last_visit_date']) ? date('Y-m-d', $app['last_visit_date']) : '';
             if ($app['loan_visit_id'] != 0) {
