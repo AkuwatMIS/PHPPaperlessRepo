@@ -53,6 +53,7 @@ class ExtractDataController extends Controller
 // nohup php yii extract-data/member-address        done
 // nohup php yii extract-data/member-phone          done
 
+
     public function actionMember()
     {
         $loopArray = [1, 2];

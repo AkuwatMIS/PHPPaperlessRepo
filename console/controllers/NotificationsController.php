@@ -108,7 +108,7 @@ class NotificationsController extends Controller
             ->groupBy('members.id')
             ->asArray();
             echo $query->createCommand()->getRawSql();
-            
+
 //            ->all();
 
         foreach ($query as $q) {
