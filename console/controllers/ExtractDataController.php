@@ -128,7 +128,6 @@ class ExtractDataController extends Controller
 
     }
 
-
     public function actionApplications()
     {
         $loopArray = [1, 2];
