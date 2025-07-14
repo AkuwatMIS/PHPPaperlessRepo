@@ -583,9 +583,6 @@ class HousingDashboardController extends Controller
             $i++;
         }
 
-        print_r($loans_data);
-        die();
-
 
         $headers = array
         (
