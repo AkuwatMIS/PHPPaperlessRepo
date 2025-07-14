@@ -572,15 +572,15 @@ class HousingDashboardController extends Controller
             $loans_data[$i]['status'] = $app['status'];
             $loans_data[$i]['visits_count'] = !empty($app['visits_count']) ? $app['visits_count'] : 0;
             $loans_data[$i]['last_visit_date'] = !empty($app['last_visit_date']) ? date('Y-m-d', $app['last_visit_date']) : '';
-            if ($app['loan_visit_id'] != 0) {
-                $loans_data[$i]['visit_images'] = ImageHelper::getVisitImages($app['loan_visit_id'], 1);
-            } else {
+//            if ($app['loan_visit_id'] != 0) {
+//                $loans_data[$i]['visit_images'] = ImageHelper::getVisitImages($app['loan_visit_id'], 1);
+//            } else {
                 $loans_data[$i]['visit_images'] = [];
-            }
+//            }
             $loans_data[$i]['is_shifted'] = $shifted;
             $i++;
         }
-        
+
 
         $headers = array
         (
