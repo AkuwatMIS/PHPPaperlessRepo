@@ -599,11 +599,13 @@ class HousingDashboardController extends Controller
 
 
             $ch = curl_init('http://20.174.13.174/post_data_project_details.php');
+            echo $ch;
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($loans_data));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            print_r($ch);
             $result = curl_exec($ch);
             print_r($result);
             curl_close($ch);
