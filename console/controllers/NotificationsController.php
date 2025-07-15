@@ -89,13 +89,6 @@ class NotificationsController extends Controller
         $date = date("Y-m-11");
         $date2 = date("Y-m-13", strtotime("+1 month"));
 
-
-        echo $date;
-        echo '----';
-        echo $date2;
-        die();
-
-
         $subQuery = "(SELECT member_id, phone 
                FROM members_phone 
                WHERE is_current = 1 AND phone_type = 'Mobile') AS phone_sub";
@@ -112,11 +105,11 @@ class NotificationsController extends Controller
             ->innerJoin('applications', 'applications.member_id = members.id')
             ->innerJoin('loans', 'loans.application_id = applications.id')
             ->where('DATE(member_info.cnic_expiry_date) >= DATE("'.$date.'")')
-            ->andWhere('DATE(member_info.cnic_expiry_date) <= DATE("'.$nextDate.'")')
+            ->andWhere('DATE(member_info.cnic_expiry_date) <= DATE("'.$date2.'")')
             ->andWhere(['loans.status'=> 'collected'])
             ->groupBy('members.id')
-            ->asArray()
-//            echo $query->createCommand()->getRawSql();
+            ->asArray();
+            echo $query->createCommand()->getRawSql();
             ->all();
 
         foreach ($query as $q) {
