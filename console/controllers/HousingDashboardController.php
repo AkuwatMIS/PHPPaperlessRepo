@@ -617,7 +617,7 @@ class HousingDashboardController extends Controller
             } else {
                 $loans_data[$i]['visit_images'] = [];
             }
-                $loans_data[$i]['is_shifted'] =   (!empty($loans_data[$i]['is_shifted']) && $loans_data[$i]['is_shifted'] != null) ? $loans_data[$i]['is_shifted'] : 0;
+                $loans_data[$i]['is_shifted'] = isset($app['is_shifted']) ? $app['is_shifted'] : 0;
                 $i++;
             }
 
