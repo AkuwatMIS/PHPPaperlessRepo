@@ -469,7 +469,11 @@ class HousingDashboardController extends Controller
     public function actionHousingProjectLoansPushApniChhatApnaGhar()
     {
         $loans_data = [];
-        $applications = "select m.id as id,
+
+        $branches = Branches::find()->where(['status'=>1])->andWhere(['province_id'=>1])->select(['id'])->get();
+        foreach ($branches as $branch){
+            $branchId = $branch->id;
+            $applications = "select m.id as id,
                         applications.id as application_id,
                         applications.req_amount as req_amount,
                         m.full_name as full_name,
@@ -527,63 +531,64 @@ class HousingDashboardController extends Controller
                  inner join activities a on a.id=applications.activity_id
                  left join application_details ad on ad.parent_id=applications.id and ad.parent_type='application'
                  where l.status in ('collected','loan completed')
-              and applications.deleted=0 and applications.project_id=132";
+              and applications.deleted=0 and applications.project_id=132 and applications.branch_id=$branchId->id";
 //        applications.status in ("approved","pending")
 //        and l.status in ("collected","loan completed","rejected","not collected")
 //        AND applications.id=4205458
-        $applications = \Yii::$app->db->createCommand($applications)->queryAll();
-        $i = 0;
-        foreach ($applications as $app) {
+            $applications = \Yii::$app->db->createCommand($applications)->queryAll();
+            $i = 0;
+            foreach ($applications as $app) {
 
 //            $shifted = ApplicationDetails::getShifted($app['application_id']);
 
-            $loans_data[$i]['name'] = $app['full_name'];
-            $loans_data[$i]['parentage'] = $app['parentage'];
-            $loans_data[$i]['cnic'] = $app['cnic'];
-            $loans_data[$i]['parentage_type'] = $app['parentage_type'];
-            $loans_data[$i]['gender'] = $app['gender'];
-            $loans_data[$i]['dob'] = date('Y-m-d', $app['dob']);
-            $loans_data[$i]['education'] = $app['education'];
-            $loans_data[$i]['marital_status'] = $app['marital_status'];
-            $loans_data[$i]['family_member_name'] = $app['family_member_name'];
-            $loans_data[$i]['family_member_cnic'] = $app['family_member_cnic'];
-            $loans_data[$i]['religion'] = $app['religion'];
-            $loans_data[$i]['project'] = 'Low Cost Housing Scheme';
-            $loans_data[$i]['application_no'] = $app['application_no'];
-            $loans_data[$i]['product'] = $app['product_name'];
-            $loans_data[$i]['purpose'] = $app['activity_name'];
-            $loans_data[$i]['sub_purpose'] = $app['sub_activity'];
-            $loans_data[$i]['application_date'] = date('Y-m-d', $app['application_date']);
-            $loans_data[$i]['region'] = $app['region_id'];
-            $loans_data[$i]['area'] = $app['area_id'];
-            $loans_data[$i]['branch'] = $app['branch_id'];
-            $loans_data[$i]['city'] = $app['city_id'];
-            $loans_data[$i]['district'] = $app['district_id'];
-            $loans_data[$i]['address'] = $app['address'];
-            $loans_data[$i]['mobile_no'] = $app['phone'];
-            $loans_data[$i]['member_id'] = $app['id'];
-            $loans_data[$i]['application_id'] = $app['application_id'];
-            $loans_data[$i]['image_path'] = $app['profile_pic'];
-            $loans_data[$i]['longitude'] = isset($app['longitude']) && !empty($app['longitude']) && $app['longitude'] != null ? $app['longitude'] : 0;
-            $loans_data[$i]['latitude'] = isset($app['latitude']) && !empty($app['latitude']) && $app['latitude'] != null ? $app['latitude'] : 0;
-            $loans_data[$i]['province'] = !empty($app['province_id']) ? $app['province_id'] : 0;
-            $loans_data[$i]['completion_percent'] = !empty($app['completion_percent']) ? $app['completion_percent'] : 0;
-            $loans_data[$i]['loan_amount'] = $app['loan_amount'];
-            $loans_data[$i]['disbursed_amount'] = $app['disbursed_amount'];
-            $loans_data[$i]['sanction_no'] = $app['sanction_no'];
-            $loans_data[$i]['status'] = $app['status'];
-            $loans_data[$i]['visits_count'] = !empty($app['visits_count']) ? $app['visits_count'] : 0;
-            $loans_data[$i]['last_visit_date'] = !empty($app['last_visit_date']) ? date('Y-m-d', $app['last_visit_date']) : '';
+                $loans_data[$i]['name'] = $app['full_name'];
+                $loans_data[$i]['parentage'] = $app['parentage'];
+                $loans_data[$i]['cnic'] = $app['cnic'];
+                $loans_data[$i]['parentage_type'] = $app['parentage_type'];
+                $loans_data[$i]['gender'] = $app['gender'];
+                $loans_data[$i]['dob'] = date('Y-m-d', $app['dob']);
+                $loans_data[$i]['education'] = $app['education'];
+                $loans_data[$i]['marital_status'] = $app['marital_status'];
+                $loans_data[$i]['family_member_name'] = $app['family_member_name'];
+                $loans_data[$i]['family_member_cnic'] = $app['family_member_cnic'];
+                $loans_data[$i]['religion'] = $app['religion'];
+                $loans_data[$i]['project'] = 'Low Cost Housing Scheme';
+                $loans_data[$i]['application_no'] = $app['application_no'];
+                $loans_data[$i]['product'] = $app['product_name'];
+                $loans_data[$i]['purpose'] = $app['activity_name'];
+                $loans_data[$i]['sub_purpose'] = $app['sub_activity'];
+                $loans_data[$i]['application_date'] = date('Y-m-d', $app['application_date']);
+                $loans_data[$i]['region'] = $app['region_id'];
+                $loans_data[$i]['area'] = $app['area_id'];
+                $loans_data[$i]['branch'] = $app['branch_id'];
+                $loans_data[$i]['city'] = $app['city_id'];
+                $loans_data[$i]['district'] = $app['district_id'];
+                $loans_data[$i]['address'] = $app['address'];
+                $loans_data[$i]['mobile_no'] = $app['phone'];
+                $loans_data[$i]['member_id'] = $app['id'];
+                $loans_data[$i]['application_id'] = $app['application_id'];
+                $loans_data[$i]['image_path'] = $app['profile_pic'];
+                $loans_data[$i]['longitude'] = isset($app['longitude']) && !empty($app['longitude']) && $app['longitude'] != null ? $app['longitude'] : 0;
+                $loans_data[$i]['latitude'] = isset($app['latitude']) && !empty($app['latitude']) && $app['latitude'] != null ? $app['latitude'] : 0;
+                $loans_data[$i]['province'] = !empty($app['province_id']) ? $app['province_id'] : 0;
+                $loans_data[$i]['completion_percent'] = !empty($app['completion_percent']) ? $app['completion_percent'] : 0;
+                $loans_data[$i]['loan_amount'] = $app['loan_amount'];
+                $loans_data[$i]['disbursed_amount'] = $app['disbursed_amount'];
+                $loans_data[$i]['sanction_no'] = $app['sanction_no'];
+                $loans_data[$i]['status'] = $app['status'];
+                $loans_data[$i]['visits_count'] = !empty($app['visits_count']) ? $app['visits_count'] : 0;
+                $loans_data[$i]['last_visit_date'] = !empty($app['last_visit_date']) ? date('Y-m-d', $app['last_visit_date']) : '';
 //            if ($app['loan_visit_id'] != 0) {
 //                $loans_data[$i]['visit_images'] = ImageHelper::getVisitImages($app['loan_visit_id'], 1);
 //            } else {
                 $loans_data[$i]['visit_images'] = [];
 //            }
-            $loans_data[$i]['is_shifted'] =   (!empty($loans_data[$i]['is_shifted']) && $loans_data[$i]['is_shifted'] != null) ? $loans_data[$i]['is_shifted'] : 0;
-            $i++;
+                $loans_data[$i]['is_shifted'] =   (!empty($loans_data[$i]['is_shifted']) && $loans_data[$i]['is_shifted'] != null) ? $loans_data[$i]['is_shifted'] : 0;
+                $i++;
 
-            print_r($loans_data);
-            die();
+                print_r($loans_data);
+                die();
+            }
         }
 
 
