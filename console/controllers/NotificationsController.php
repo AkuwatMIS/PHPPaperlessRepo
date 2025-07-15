@@ -88,7 +88,7 @@ class NotificationsController extends Controller
     {
         $date = date("Y-m-11");
         $date2 = date("Y-m-13", strtotime("+1 month"));
-        $nextDate = date('',$date2);
+        $nextDate = date('Y-m-d',$date2);
 
 
         echo $date;
