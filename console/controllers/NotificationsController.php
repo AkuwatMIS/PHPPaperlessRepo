@@ -108,9 +108,9 @@ class NotificationsController extends Controller
             ->andWhere('DATE(member_info.cnic_expiry_date) <= DATE("'.$date2.'")')
             ->andWhere(['loans.status'=> 'collected'])
             ->groupBy('members.id')
-            ->asArray();
-            echo $query->createCommand()->getRawSql();
-//            ->all();
+            ->asArray()
+//            echo $query->createCommand()->getRawSql();
+            ->all();
 
         foreach ($query as $q) {
 
