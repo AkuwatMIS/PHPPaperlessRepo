@@ -605,10 +605,11 @@ class HousingDashboardController extends Controller
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            print_r($ch);
+           
             $result = curl_exec($ch);
             print_r($result);
             curl_close($ch);
+            die();
         }
 
     }
