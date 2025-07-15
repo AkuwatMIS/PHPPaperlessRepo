@@ -473,6 +473,8 @@ class HousingDashboardController extends Controller
         $branches = Branches::find()->where(['status'=>1])->andWhere(['province_id'=>1])->select(['id'])->all();
         foreach ($branches as $branch){
             $branchId = $branch->id;
+            echo $branchId;
+            die();
             $applications = "select m.id as id,
                         applications.id as application_id,
                         applications.req_amount as req_amount,
