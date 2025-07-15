@@ -83,8 +83,8 @@ class NotificationsController extends Controller
 
     }
 
-    // php yii notifications/notify-borrower-push
-    public function actionNotifyBorrowerPush()
+    // php yii notifications/notify-borrower-push-all
+    public function actionNotifyBorrowerPushAll()
     {
         $date = date("Y-m-11");
         $date2 = date("Y-m-13", strtotime("+1 month"));
@@ -104,8 +104,7 @@ class NotificationsController extends Controller
             ->innerJoin($subQuery, 'phone_sub.member_id = members.id')
             ->innerJoin('applications', 'applications.member_id = members.id')
             ->innerJoin('loans', 'loans.application_id = applications.id')
-            ->where('DATE(member_info.cnic_expiry_date) >= DATE("'.$date.'")')
-            ->andWhere('DATE(member_info.cnic_expiry_date) <= DATE("'.$date2.'")')
+            ->where('DATE(member_info.cnic_expiry_date) <= DATE("'.$date2.'")')
             ->andWhere(['loans.status'=> 'collected'])
             ->groupBy('members.id')
             ->asArray()
