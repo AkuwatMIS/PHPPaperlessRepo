@@ -588,27 +588,28 @@ class HousingDashboardController extends Controller
             }
 
             print_r($loans_data);
+
+            $headers = array
+            (
+                'X-Access-Token: 453fc1e7e030326df71ab9278283fb8a',
+                'Content-Type: application/json',
+                'x-api-key: sdf3rfew3ferf$dfvfrrg#dgsrr2342gdas',
+                'version_code: 19',
+            );
+
+
+            $ch = curl_init('http://20.174.13.174/post_data_project_details.php');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($loans_data));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $result = curl_exec($ch);
+            print_r($result);
+            curl_close($ch);
+
         }
 
-
-        $headers = array
-        (
-            'X-Access-Token: 453fc1e7e030326df71ab9278283fb8a',
-            'Content-Type: application/json',
-            'x-api-key: sdf3rfew3ferf$dfvfrrg#dgsrr2342gdas',
-            'version_code: 19',
-        );
-
-
-        $ch = curl_init('http://20.174.13.174/post_data_project_details.php');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($loans_data));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $result = curl_exec($ch);
-        print_r($result);
-        curl_close($ch);
     }
 
 
