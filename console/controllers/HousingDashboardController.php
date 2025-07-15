@@ -607,7 +607,6 @@ class HousingDashboardController extends Controller
             $result = curl_exec($ch);
             print_r($result);
             curl_close($ch);
-
         }
 
     }
