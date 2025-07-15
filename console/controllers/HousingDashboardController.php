@@ -468,6 +468,40 @@ class HousingDashboardController extends Controller
 
     public function actionHousingProjectLoansPushApniChhatApnaGhar()
     {
+
+        $truncate_url = 'http://20.174.13.174/truncate_borrowers.php';
+        $truncate_api_key = '453fc1e7e030326df71ab9278283fb8a';
+
+        $truncate_headers = [
+            'X-TRUNCATE-KEY: ' . $truncate_api_key,
+            'Content-Type: application/json'
+        ];
+
+        $ch_truncate = curl_init($truncate_url);
+        curl_setopt($ch_truncate, CURLOPT_CUSTOMREQUEST, "POST"); // Or GET, depending on how you set up truncate.php
+        curl_setopt($ch_truncate, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_truncate, CURLOPT_HTTPHEADER, $truncate_headers);
+        curl_setopt($ch_truncate, CURLOPT_SSL_VERIFYPEER, false); // Consider carefully in production
+
+        $truncate_result = curl_exec($ch_truncate);
+        $truncate_http_code = curl_getinfo($ch_truncate, CURLINFO_HTTP_CODE);
+        $curl_error = curl_error($ch_truncate);
+        curl_close($ch_truncate);
+
+        if ($curl_error) {
+            \Yii::error("TRUNCATE cURL Error: " . $curl_error, __METHOD__);
+            return json_encode(['status' => 'error', 'message' => 'Failed to connect to truncate service: ' . $curl_error]);
+        }
+
+        $truncate_response = json_decode($truncate_result, true);
+
+        if ($truncate_http_code !== 200 || ($truncate_response['status'] ?? 'error') !== 'success') {
+            \Yii::error("Failed to truncate borrowers table. HTTP Code: {$truncate_http_code}, Response: " . print_r($truncate_response, true), __METHOD__);
+            return json_encode(['status' => 'error', 'message' => 'Failed to truncate borrowers table: ' . ($truncate_response['message'] ?? 'Unknown error')]);
+        }
+
+        \Yii::info("Borrowers table truncated successfully on remote server.", __METHOD__);
+
         $loans_data = [];
 
         $branches = Branches::find()->where(['status'=>1])->andWhere(['province_id'=>1])->select(['id'])->all();
