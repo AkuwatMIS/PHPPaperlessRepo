@@ -83,6 +83,76 @@ class NotificationsController extends Controller
 
     }
 
+    // php yii notifications/notify-borrower-push
+    public function actionNotifyBorrowerPush()
+    {
+        $date = date("Y-m-11");
+        $date2 = date("Y-m-13", strtotime("+1 month"));
+        $nextDate = date('',$date2);
+
+
+        echo $date;
+        echo '----';
+        echo $nextDate;
+        die();
+
+
+        $subQuery = "(SELECT member_id, phone 
+               FROM members_phone 
+               WHERE is_current = 1 AND phone_type = 'Mobile') AS phone_sub";
+
+        $query = Members::find()
+            ->select([
+                'members.id',
+                'members.cnic',
+                'member_info.cnic_expiry_date',
+                'phone_sub.phone'
+            ])
+            ->innerJoin('member_info', 'member_info.member_id = members.id')
+            ->innerJoin($subQuery, 'phone_sub.member_id = members.id')
+            ->innerJoin('applications', 'applications.member_id = members.id')
+            ->innerJoin('loans', 'loans.application_id = applications.id')
+            ->where('DATE(member_info.cnic_expiry_date) >= DATE("'.$date.'")')
+            ->andWhere('DATE(member_info.cnic_expiry_date) <= DATE("'.$nextDate.'")')
+            ->andWhere(['loans.status'=> 'collected'])
+            ->groupBy('members.id')
+            ->asArray()
+//            echo $query->createCommand()->getRawSql();
+            ->all();
+
+        foreach ($query as $q) {
+
+            $mobile = $q['phone'] ?? null;
+            $cnic = $q['cnic'] ?? null;
+            $cnic_expiry_date = $q['cnic_expiry_date'] ?? null;
+
+            if ($mobile && $cnic) {
+                $msg = "Your CNIC '$cnic' is one month to expired, Expiry date is $cnic_expiry_date, Please update to stay Active!.";
+
+                $sms = SmsHelper::Sendsms($mobile, $msg);
+
+                $sms_log = new SmsLogs();
+
+                $sms_log->user_id = 1;
+                $sms_log->number = $mobile;
+                $sms_log->sms_type = 'member';
+                $sms_log->type_id = $q['id'];
+
+                if (isset($sms->corpsms[0]->type) && $sms->corpsms[0]->type === 'Success') {
+                    $sms_log->status = 1;
+                    $sms_log->sent_count = ($sms_log->sent_count ?? 0) + 1;
+                } else {
+                    $sms_log->status = 2;
+                }
+
+                $sms_log->save(false); // Use save(true) if validation is needed
+            } else {
+                // Optionally log or skip invalid numbers
+                continue;
+            }
+        }
+    }
+
     // php yii notifications/notify-borrower
     public function actionNotifyBorrower()
     {
