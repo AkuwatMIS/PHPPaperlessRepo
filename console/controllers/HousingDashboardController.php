@@ -484,7 +484,6 @@ class HousingDashboardController extends Controller
                         m.gender as gender,
                         m.dob as dob,
                         m.education as education,
-                        m.education as education,
                         m.marital_status as marital_status,
                         m.family_member_name as family_member_name,
                         m.family_member_cnic as family_member_cnic,
@@ -553,7 +552,7 @@ class HousingDashboardController extends Controller
                 $loans_data[$i]['family_member_name'] = $app['family_member_name'];
                 $loans_data[$i]['family_member_cnic'] = $app['family_member_cnic'];
                 $loans_data[$i]['religion'] = $app['religion'];
-                $loans_data[$i]['project'] = 'Low Cost Housing Scheme';
+                $loans_data[$i]['project'] = 'Apni Chatt Apna Ghar';
                 $loans_data[$i]['application_no'] = $app['application_no'];
                 $loans_data[$i]['product'] = $app['product_name'];
                 $loans_data[$i]['purpose'] = $app['activity_name'];
@@ -586,9 +585,6 @@ class HousingDashboardController extends Controller
 //            }
                 $loans_data[$i]['is_shifted'] =   (!empty($loans_data[$i]['is_shifted']) && $loans_data[$i]['is_shifted'] != null) ? $loans_data[$i]['is_shifted'] : 0;
                 $i++;
-
-                print_r($loans_data);
-                die();
             }
         }
 
