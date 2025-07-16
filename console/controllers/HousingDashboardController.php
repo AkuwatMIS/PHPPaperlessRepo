@@ -508,6 +508,9 @@ class HousingDashboardController extends Controller
         foreach ($branches as $branch){
             $branchId = $branch->id;
 
+            echo $branchId;
+            echo '----';
+
             $applications = "select m.id as id,
                         applications.id as application_id,
                         applications.req_amount as req_amount,
@@ -565,7 +568,7 @@ class HousingDashboardController extends Controller
                  inner join activities a on a.id=applications.activity_id
                  left join application_details ad on ad.parent_id=applications.id and ad.parent_type='application'
                  where l.status in ('collected','loan completed') and applications.status='approved'
-              and applications.deleted=0 and applications.project_id=132 and applications.branch_id=$branchId";
+                 and applications.deleted=0 and applications.project_id=132 and b.id=$branchId";
 //        applications.status in ("approved","pending")
 //        and l.status in ("collected","loan completed","rejected","not collected")
 //        AND applications.id=4205458
