@@ -2776,7 +2776,7 @@ ORDER BY
 
 
     }
-    // nohup php yii extract-data/active-loans-detail-olp 2025-07-07
+    // nohup php yii extract-data/active-loans-detail-olp 2025-07-16
 
     public function actionActiveLoansDetailOlp($date)
     {
@@ -2799,7 +2799,7 @@ ORDER BY
             $loan_query = " 
                 SELECT
                         d.full_name client_name,
-                        d.parentage client _parentage,
+                        d.parentage client_parentage,
                         b.sanction_no,
                         FROM_UNIXTIME(b.date_disbursed) date_disbursed,
                         d.cnic member_cnic,
