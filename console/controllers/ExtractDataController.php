@@ -2776,7 +2776,7 @@ ORDER BY
 
 
     }
-    // nohup php yii extract-data/active-loans-detail-olp 2025-07-07
+    // nohup php yii extract-data/active-loans-detail-olp 2025-07-16
 
     public function actionActiveLoansDetailOlp($date)
     {
@@ -2788,7 +2788,7 @@ ORDER BY
         header('Content-type: application/csv');
         header('Content-Disposition: attachment; filename=' . 'complete_data_extract/member_olp_guarantor_data.csv');
 
-        $createColumn = array("Member Name", "Sanction No.", "Date Of Disbursed", "CNIC NO.", "Outstanding Amount (RS.)",
+        $createColumn = array("Client Name","Client  Parentage", "Sanction No.", "Date Of Disbursed", "CNIC NO.", "CNIC date of expiry", "Outstanding Amount (RS.)",
             "AML Risk Categorization", "Address", "Mobile No", "Beneficiary Name", "Beneficiary CNIC", "Family Member Name", "Family Member CNIC",
             "Guarantor1Name", "Guarantor1Parentage", "Guarantor1cnic", "Guarantor2Name", "Guarantor2Parentage", "Guarantor2cnic");
         fputcsv($fopenW, $createColumn);
@@ -2798,10 +2798,12 @@ ORDER BY
         foreach ($regions as $region){
             $loan_query = " 
                 SELECT
-                        d.full_name member_name,
+                        d.full_name client_name,
+                        d.parentage client_parentage,
                         b.sanction_no,
                         FROM_UNIXTIME(b.date_disbursed) date_disbursed,
                         d.cnic member_cnic,
+                        member_info.cnic_expiry_date cnic_date_of_expiry,
                         @rec_amnt :=(SELECT coalesce(sum(r.amount),0) FROM recoveries r WHERE r.receive_date <= $dated AND r.loan_id=b.id  AND r.deleted=0) rec_amount_total,
                         (b.disbursed_amount-@rec_amnt) as olp,
                         (SELECT phone FROM members_phone where is_current=1 and member_id=d.id order by created_at desc LIMIT 1) as phone,
@@ -2820,6 +2822,7 @@ ORDER BY
                         loans b
                         INNER JOIN applications c ON c.id=b.application_id
                         INNER JOIN members d ON d.id=c.member_id
+                        INNER  join member_info on member_info.member_id=d.id
                     LEFT JOIN 
                         (SELECT 
                              t2.id,
@@ -2850,10 +2853,12 @@ ORDER BY
             if (!empty($LoanData) && $LoanData != null) {
                 foreach ($LoanData as $key => $d) {
 
-                    $array['member_name'] = $d['member_name'];
+                    $array['client_name'] = $d['client_name'];
+                    $array['client _parentage'] = $d['client_parentage'];
                     $array['sanction_no'] = $d['sanction_no'];
                     $array['date_disbursed'] = $d['date_disbursed'];
                     $array['member_cnic'] = $d['member_cnic'];
+                    $array['cnic_date_of_expiry'] = $d['cnic_date_of_expiry'];
                     $array['olp'] = $d['olp'];
                     $array['risk_categorization'] = 'LOW';
                     $array['address'] = $d['address'];
