@@ -678,7 +678,7 @@ $this->registerJs($js);
             <div class="col-sm-3">
                 <?= $form->field($model, 'inst_months')->dropDownList(\common\components\Helpers\LoanHelper::getLoanPeriodPq(), ['prompt' => 'Installment Months', 'class' => 'form-control form-control-sm'])->label('Installment Months'); ?>
             </div>
-        <?php } else if (in_array($application->project_id, [89, 92, 96, 100, 101, 129, 143])) { ?>
+        <?php } else if (in_array($application->project_id, [89, 92, 96, 100, 101, 129, 143,145])) { ?>
             <div class="col-sm-3">
                 <?php if ($application->project_id == 96 || $application->project_id == 100 || $application->project_id == 101 || $application->project_id == 129 || $application->project_id == 143) { ?>
                     <?= $form->field($model, 'inst_months')->dropDownList(\common\components\Helpers\LoanHelper::getLoanPeriodMusharqa(), ['prompt' => 'Installment Months', 'class' => 'form-control form-control-sm'])->label('Installment Months'); ?>
