@@ -625,7 +625,7 @@ class ApplicationHelper
                     //$model->addError('member_id', 'Application against this member is already in-process against Application Number:' . $app->application_no);
                     $model->status = 'rejected';
                     $model->reject_reason = 'Application against this member is already in-process against Application Number:' . $app->application_no;
-                } else*/ if (!empty($app->loan) && $app->loan->status != 'loan completed' && $app->loan->status != 'not collected' && $app->loan->status !='rejected' && $model->project_id!=98) {
+                } else*/ if (!empty($app->loan) && $app->loan->status != 'loan completed' && $app->loan->status !='rejected' && $model->project_id!=98) {
                     //$model->addError('member_id', 'Already have active loan against this member with Sanction Number: '.$app->loan->sanction_no);
                     $model->status = 'rejected';
                     $model->reject_reason = 'Already have active loan against this member with Sanction Number: ' . $app->loan->sanction_no;
