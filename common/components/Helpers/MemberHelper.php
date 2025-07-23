@@ -283,7 +283,7 @@ class MemberHelper
             ->join('inner join','applications','applications.id=loans.application_id')
             ->join('inner join','members','members.id=applications.member_id')
             ->filterWhere(['=', 'members.family_member_cnic', $cnic])
-            ->andFilterWhere(['not in','loans.status',['loan completed','not collected','rejected']])
+            ->andFilterWhere(['not in','loans.status',['loan completed','not collected','rejected','grant']])
             ->andFilterWhere(['not in','loans.project_id',StructureHelper::withoutCheckProjects()])
             ->andFilterWhere(['loans.deleted'=>0])
             ->one();
