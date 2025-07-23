@@ -1814,7 +1814,7 @@ class ApplicationsController extends Controller
 //        $projects_name = Yii::$app->Permission->getProjectListNameWise(Yii::$app->controller->id, Yii::$app->controller->action->id,$this->rbac_type);
         $projects_name = ArrayHelper::map(Projects::find()->where(['in', 'id', [
             52, 61, 62, 67, 64, 76, 77, 78, 79, 83, 90, 97, 103, 109, 105, 106, 36,
-            74, 85, 86, 88, 94, 96, 99, 100, 110, 113, 11, 56, 118, 114, 119, 124, 126, 127,132,87,134,136,128,35,96
+            74, 85, 86, 88, 94, 96, 99, 100, 110, 113, 11, 56, 118, 114, 119, 124, 126, 127,132,87,134,136,128,35,96,146
 
         ]])->all(), 'id', 'name');
         return $this->render('bank-accounts/bankaccount', [
