@@ -40,7 +40,7 @@ class StructureHelper
 {
     public static function accountVerifyProjects()
     {
-        $project_ids = [52, 61, 62, 64, 67, 76, 77, 78, 79, 90, 83, 97, 103, 109, 105, 106, 118, 127, 132, 136, 134];
+        $project_ids = [52, 61, 62, 64, 67, 76, 77, 78, 79, 90, 83, 97, 103, 109, 105, 106, 118, 127, 132, 136, 134,146];
         return $project_ids;
     }
 

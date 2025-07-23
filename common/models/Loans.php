@@ -203,7 +203,7 @@ class Loans extends \yii\db\ActiveRecord
 
     public function setLoaninfo()
     {
-        if (!in_array($this->project_id, StructureHelper::trancheProjects()) && !in_array($this->project_id, [132,75,35,6, 10, 59, 78, 128, 87, 74, 94, 83, 100, 106, 112, 118, 119, 121, 123, 124, 125, 126, 111, 122, 96, 113, 24, 129, 130, 109, 131,134,135,136,137,138,139,140,141,142,143,145])) {
+        if (!in_array($this->project_id, StructureHelper::trancheProjects()) && !in_array($this->project_id, [132,75,35,6, 10, 59, 78, 128, 87, 74, 94, 83, 100, 106, 112, 118, 119, 121, 123, 124, 125, 126, 111, 122, 96, 113, 24, 129, 130, 109, 131,134,135,136,137,138,139,140,141,142,143,145,146])) {
             $this->inst_months = 0;
         }
 
@@ -281,6 +281,9 @@ class Loans extends \yii\db\ActiveRecord
             $this->inst_type = 'Monthly';
             $this->inst_amnt = ceil(($this->loan_amount / $this->inst_months) / 100) * 100;
         } else if ($this->project_id == 145) {
+            $this->inst_type = 'Monthly';
+            $this->inst_amnt = ceil(($this->loan_amount / $this->inst_months) / 100) * 100;
+        } else if ($this->project_id == 146) {
             $this->inst_type = 'Monthly';
             $this->inst_amnt = ceil(($this->loan_amount / $this->inst_months) / 100) * 100;
         } else if ($this->project_id == 74) {

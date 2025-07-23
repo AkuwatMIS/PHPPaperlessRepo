@@ -324,7 +324,7 @@ function calc_inst(){
              $(\"#loans-inst_amnt\").val(inst_amnt);
              $(\"#loans-inst_type\").val(LoanInstType);
     }
-     else if(project_id == \"131\" || project_id == \"98\" || project_id == \"109\" || project_id == \"114\" || project_id == \"110\"|| project_id == \"52\" || project_id == \"103\" || project_id==61 || project_id==62 || project_id==64 || project_id==97 || project_id==113 || project_id==67 || project_id==76 || project_id==90 || project_id==87 || project_id==74 || project_id==78  || project_id==128 || project_id==113 || project_id==94 || project_id==112 || project_id==83 || project_id==96 || project_id==100 || project_id==101 || project_id==118 || project_id==119 || project_id==120 || project_id==121 || project_id==123 || project_id==125 || project_id==126 || project_id==111 || project_id==127 || project_id==24 || project_id==130 || project_id==132 || project_id==136 || project_id==139 || project_id==140 || project_id==141 || project_id==142 || project_id==35 || project_id==143 || project_id==145 ){
+     else if(project_id == \"131\" || project_id == \"98\" || project_id == \"109\" || project_id == \"114\" || project_id == \"110\"|| project_id == \"52\" || project_id == \"103\" || project_id==61 || project_id==62 || project_id==64 || project_id==97 || project_id==113 || project_id==67 || project_id==76 || project_id==90 || project_id==87 || project_id==74 || project_id==78  || project_id==128 || project_id==113 || project_id==94 || project_id==112 || project_id==83 || project_id==96 || project_id==100 || project_id==101 || project_id==118 || project_id==119 || project_id==120 || project_id==121 || project_id==123 || project_id==125 || project_id==126 || project_id==111 || project_id==127 || project_id==24 || project_id==130 || project_id==132 || project_id==136 || project_id==139 || project_id==140 || project_id==141 || project_id==142 || project_id==35 || project_id==143 || project_id==145 || project_id==146 ){
              if(project_id == \"131\"){
                 if(product_id !=15){
                     if(loan_amount <= 30000){
@@ -480,7 +480,7 @@ $(document).ready(function(){
     $(\"#loans-loan_amount\").change(function() {
               project_id=\"" . ($application->project_id) . "\";
               var loan_amount = $(\"#loans-loan_amount\").val();
-              if(project_id == \"98\" || project_id == \"109\" || project_id == \"114\" || project_id == \"110\" || project_id==\"52\" || project_id==\"103\" || project_id==61 || project_id==62 || project_id==64 || project_id==97 || project_id==113 || project_id==67 || project_id==76 || project_id==90 || project_id==87 || project_id==74 || project_id==78 || project_id==128|| project_id==94 || project_id==112 || project_id==83 || project_id==100 || project_id==101  || project_id==118 || project_id==119 || project_id==126 || project_id==127 || project_id==24 || project_id==129 || project_id==130 || project_id==132 || project_id==135 || project_id==136 || project_id==137 || project_id==138 || project_id==139 || project_id==140 || project_id==141 || project_id==142 || project_id==35 || project_id==143 || project_id==145){
+              if(project_id == \"98\" || project_id == \"109\" || project_id == \"114\" || project_id == \"110\" || project_id==\"52\" || project_id==\"103\" || project_id==61 || project_id==62 || project_id==64 || project_id==97 || project_id==113 || project_id==67 || project_id==76 || project_id==90 || project_id==87 || project_id==74 || project_id==78 || project_id==128|| project_id==94 || project_id==112 || project_id==83 || project_id==100 || project_id==101  || project_id==118 || project_id==119 || project_id==126 || project_id==127 || project_id==24 || project_id==129 || project_id==130 || project_id==132 || project_id==135 || project_id==136 || project_id==137 || project_id==138 || project_id==139 || project_id==140 || project_id==141 || project_id==142 || project_id==35 || project_id==143 || project_id==145 || project_id==146){
                 $(\"#loans-loan_amount\").blur(calc_summary);
                 $(\"#loans-loan_amount\").change(calc_summary);
                 $(\"#loans-inst_months\").change(calc_summary);
@@ -654,7 +654,7 @@ $this->registerJs($js);
             <div class="col-sm-3">
                 <?= $form->field($model, 'inst_months')->dropDownList(\common\components\Helpers\LoanHelper::getLoanPeriodAkm(), ['prompt' => 'Installment Months', 'class' => 'form-control form-control-sm'])->label('Installment Months'); ?>
             </div>
-        <?php } else if (in_array($application->project_id, [87, 78, 120, 126, 111, 128,135,74,142,35])) { ?>
+        <?php } else if (in_array($application->project_id, [87, 78, 120, 126, 111, 128,135,74,142,35,146])) { ?>
             <div class="col-sm-3">
                 <?= $form->field($model, 'inst_months')->dropDownList(\common\components\Helpers\LoanHelper::getLoanPeriodkpkarobar(), ['prompt' => 'Installment Months', 'class' => 'form-control form-control-sm'])->label('Installment Months'); ?>
             </div>
