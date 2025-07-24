@@ -291,7 +291,7 @@ class DisbursementsController extends Controller
                     $model->date_disbursed = 0;
                     if ($model->save()) {
                         $loan_update=Loans::findOne($model->loan_id);
-                        $loan_update->status='not collected';
+                        $loan_update->status='pending';
                         $loan_update->save();
                         ActionsHelper::updateAction('tranche',$model->id,'disbursement');
                         $response['status_type'] = "success";
@@ -539,13 +539,13 @@ class DisbursementsController extends Controller
         }
         else if($tranch->attendance_status=='absent'){
             if($tranch->tranch_no==1){
-                $model->status='not collected';
+                $model->status='pending';
                 $model->save();
                 $result=LoanHelper::absentLoan($tranch);
             }
             $response['status_type'] = "success";
             $response['data']['message'] = "Saved";
-            $response['data']['status'] = "not collected";
+            $response['data']['status'] = "pending";
         }
         return json_encode($response);
     }
