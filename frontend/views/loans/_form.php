@@ -654,7 +654,7 @@ $this->registerJs($js);
             <div class="col-sm-3">
                 <?= $form->field($model, 'inst_months')->dropDownList(\common\components\Helpers\LoanHelper::getLoanPeriodAkm(), ['prompt' => 'Installment Months', 'class' => 'form-control form-control-sm'])->label('Installment Months'); ?>
             </div>
-        <?php } else if (in_array($application->project_id, [87, 78, 120, 126, 111, 128,135,74,142,35,146])) { ?>
+        <?php } else if (in_array($application->project_id, [87, 78, 120, 126, 111, 128,135,74,142,35,146,112])) { ?>
             <div class="col-sm-3">
                 <?= $form->field($model, 'inst_months')->dropDownList(\common\components\Helpers\LoanHelper::getLoanPeriodkpkarobar(), ['prompt' => 'Installment Months', 'class' => 'form-control form-control-sm'])->label('Installment Months'); ?>
             </div>
