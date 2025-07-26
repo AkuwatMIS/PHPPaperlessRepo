@@ -8726,6 +8726,7 @@ where 1 and l.status in ('collected','loan completed') and l.deleted=0 and l.act
             ];
 
             AcagHelper::actionPushDisbursement($obj);
+            print_r($obj);
             echo '---'.$cnic_without_hyphens.'---';
             die();
         }
