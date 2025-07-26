@@ -8723,9 +8723,7 @@ where 1 and l.status in ('collected','loan completed') and l.deleted=0 and l.act
                 "FirstDueDate" => null,
                 "SecondDisbursementDate" => null,
             ];
-
-            print_r($obj);
-            die();
+            
             // Send to disbursement push
             AcagHelper::actionPushDisbursement($obj);
         }
