@@ -8715,17 +8715,17 @@ where 1 and l.status in ('collected','loan completed') and l.deleted=0 and l.act
         $trancheDisbursed = $command->queryAll();
 
         foreach ($trancheDisbursed as $loan) {
+            $cnic_without_hyphens = str_replace('-', '', $loan['cnic']);
             $obj = [
-                "CNIC" => str_replace('-', '', $loan['cnic']),
-                "FirstDisbursementDate" => date('Y-m-d', $loan['date_disbursed']),
-                "NoOfInstallments" => null,
-                "MonthlyInstallmentAmount" => null,
-                "FirstDueDate" => null,
-                "SecondDisbursementDate" => null,
+                "CNIC"=> $cnic_without_hyphens,
+                "FirstDisbursementDate"=> date('Y-m-d', $loan['date_disbursed']),
+                "NoOfInstallments"=>null,
+                "MonthlyInstallmentAmount"=> null,
+                "FirstDueDate"=>null,
+                "SecondDisbursementDate"=> null,
             ];
-
-            // Send to disbursement push
             AcagHelper::actionPushDisbursement($obj);
+            echo 'success-'.$cnic_without_hyphens.'---';
         }
     }
 

@@ -193,11 +193,11 @@ class AcagHelper
 
         $response = curl_exec($curl);
 
-//        if ($response === false) {
-//            echo 'Curl error: ' . curl_error($curl);
-//        } else {
-//            echo 'Response: ' . $response;
-//        }
+        if ($response === false) {
+            echo 'Curl error: ' . curl_error($curl);
+        } else {
+            echo 'Response: ' . $response;
+        }
 
         curl_close($curl);
         return true;
