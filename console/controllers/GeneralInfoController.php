@@ -8690,20 +8690,28 @@ where 1 and l.status in ('collected','loan completed') and l.deleted=0 and l.act
         ini_set('max_execution_time', 2000);
 
         // Fetch applications with project_id = 132
+        $placeholders = [];
+        $params = [];
+        foreach ($nicArray as $index => $cnic) {
+            $key = ':cnic' . $index;
+            $placeholders[] = $key;
+            $params[$key] = $cnic;
+        }
+
         $sql = "
                 SELECT members.cnic, loans.date_disbursed
                 FROM loans
                 INNER JOIN applications ON applications.id = loans.application_id
                 INNER JOIN members ON members.id = applications.member_id
-                WHERE members.cnic IN (" . implode(',', array_fill(0, count($nicArray), ':cnic')) . ")
+                WHERE members.cnic IN (" . implode(', ', $placeholders) . ")
                   AND loans.project_id = :project_id
-                ";
-
+            ";
+        $params[':project_id'] = 132;
         $command = Yii::$app->db->createCommand($sql);
-        foreach ($nicArray as $index => $cnic) {
-            $command->bindValue(':cnic' . $index, $cnic);
+        foreach ($params as $key => $value) {
+            $command->bindValue($key, $value);
         }
-        $command->bindValue(':project_id', 132);
+
         $trancheDisbursed = $command->queryAll();
 
         foreach ($trancheDisbursed as $loan) {
@@ -8718,7 +8726,8 @@ where 1 and l.status in ('collected','loan completed') and l.deleted=0 and l.act
 
             print_r($obj);
             die();
-             AcagHelper::actionPushDisbursement($obj);
+            // Send to disbursement push
+            AcagHelper::actionPushDisbursement($obj);
         }
     }
 
