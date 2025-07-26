@@ -8690,28 +8690,35 @@ where 1 and l.status in ('collected','loan completed') and l.deleted=0 and l.act
         ini_set('max_execution_time', 2000);
 
         // Fetch applications with project_id = 132
-            $trancheDisbursed = Loans::find()
-                ->innerJoin('applications','applications.id=loans.application_id')
-                ->innerJoin('members','members.id=applications.member_id')
-                ->where(['in','members.cnic',$nicArray])
-                ->andWhere(['loans.project_id'=>132])
-                ->select(['members.cnic','loans.date_disbursed'])
-                ->all();
+        $sql = "
+                SELECT members.cnic, loans.date_disbursed
+                FROM loans
+                INNER JOIN applications ON applications.id = loans.application_id
+                INNER JOIN members ON members.id = applications.member_id
+                WHERE members.cnic IN (" . implode(',', array_fill(0, count($nicArray), ':cnic')) . ")
+                  AND loans.project_id = :project_id
+                ";
+
+        $command = Yii::$app->db->createCommand($sql);
+        foreach ($nicArray as $index => $cnic) {
+            $command->bindValue(':cnic' . $index, $cnic);
+        }
+        $command->bindValue(':project_id', 132);
+        $trancheDisbursed = $command->queryAll();
 
         foreach ($trancheDisbursed as $loan) {
             $obj = [
-                "CNIC"=> $loan->cnic,
-                "FirstDisbursementDate"=> date('Y-m-d',$loan->date_disbursed),
-                "NoOfInstallments"=>null,
-                "MonthlyInstallmentAmount"=> null,
-                "FirstDueDate"=>null,
-                "SecondDisbursementDate"=> null,
+                "CNIC" => $loan['cnic'],
+                "FirstDisbursementDate" => date('Y-m-d', strtotime($loan['date_disbursed'])),
+                "NoOfInstallments" => null,
+                "MonthlyInstallmentAmount" => null,
+                "FirstDueDate" => null,
+                "SecondDisbursementDate" => null,
             ];
 
             print_r($obj);
             die();
-            AcagHelper::actionPushDisbursement($obj);
-
+             AcagHelper::actionPushDisbursement($obj);
         }
     }
 
