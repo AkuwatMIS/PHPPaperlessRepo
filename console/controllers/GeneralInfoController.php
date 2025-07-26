@@ -8696,7 +8696,7 @@ where 1 and l.status in ('collected','loan completed') and l.deleted=0 and l.act
                 ->where(['in','members.cnic',$nicArray])
                 ->andWhere(['loans.project_id'=>132])
                 ->select(['members.cnic','loans.date_disbursed'])
-                ->get();
+                ->all();
 
         foreach ($trancheDisbursed as $loan) {
             $obj = [
