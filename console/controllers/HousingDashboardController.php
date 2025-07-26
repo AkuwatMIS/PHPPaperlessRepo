@@ -575,7 +575,7 @@ class HousingDashboardController extends Controller
             $applications = \Yii::$app->db->createCommand($applications)->queryAll();
             $i = 0;
             foreach ($applications as $app) {
-                
+
 
 //            $shifted = ApplicationDetails::getShifted($app['application_id']);
 
