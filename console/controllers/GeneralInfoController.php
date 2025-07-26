@@ -8699,7 +8699,7 @@ where 1 and l.status in ('collected','loan completed') and l.deleted=0 and l.act
         }
 
         $sql = "
-                SELECT members.cnic, loans.date_disbursed
+                SELECT members.cnic, loans.date_disbursed,loans.disbursed_amount
                 FROM loans
                 INNER JOIN applications ON applications.id = loans.application_id
                 INNER JOIN members ON members.id = applications.member_id
@@ -8724,9 +8724,10 @@ where 1 and l.status in ('collected','loan completed') and l.deleted=0 and l.act
                 "FirstDueDate"=>null,
                 "SecondDisbursementDate"=> null,
             ];
-            
+
             AcagHelper::actionPushDisbursement($obj);
             echo '---'.$cnic_without_hyphens.'---';
+            die();
         }
     }
 
