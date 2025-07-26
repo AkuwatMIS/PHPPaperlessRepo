@@ -8711,7 +8711,9 @@ where 1 and l.status in ('collected','loan completed') and l.deleted=0 and l.act
         foreach ($params as $key => $value) {
             $command->bindValue($key, $value);
         }
-
+        echo $command->getSql();  // SQL with placeholders like :cnic0, :project_id
+        print_r($params);
+        die();
         $trancheDisbursed = $command->queryAll();
 
         foreach ($trancheDisbursed as $loan) {
