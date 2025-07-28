@@ -324,7 +324,7 @@ class DisbursementHelper
                     $obj = [
                         "CNIC"=> $cnic_without_hyphens,
                         "FirstDisbursementDate"=> $disburse_date,
-                        "NoOfInstallments"=>$total_instalments_count,
+                        "NoOfInstallments"=>$total_instalments,
                         "MonthlyInstallmentAmount"=> $schedule_amount,
                         "FirstDueDate"=>$first_schedule_date,
                         "SecondDisbursementDate"=> null,
