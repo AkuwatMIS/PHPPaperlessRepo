@@ -32,6 +32,19 @@ class AcagHelper
         $percent = 0;
 
         if (isset($loan) && $loan != null) {
+            $AmountApproved = $loan->loan_amount;
+
+            $loan_tranches = LoanTranches::find()
+                ->where(['loan_id' => $loan->id])
+                ->andWhere(['status' => 6])
+                ->all();
+            $amount_sum = 0;
+            foreach ($loan_tranches as $key => $amount) {
+                $amount_sum += $amount->tranch_amount;
+            }
+
+            $AmountDisbursed = $amount_sum;
+
             if ($Status == 'Visit') {
                 $Status = null;
                 $Reason = null;
@@ -54,11 +67,13 @@ class AcagHelper
                 $percent = $visit->percent;
             }elseif ($Status =='Loan Rejected'){
                 $recoveryAmount = 0;
+                $AmountDisbursed = 0;
             } else {
                 $visit = Visits::find()->where(['parent_type' => 'application'])
                     ->andWhere(['parent_id' => $loan->application_id])
                     ->one();
             }
+
             $Long = $visit->longitude;
             $Lat = $visit->latitude;
             if (!empty($visit) && $visit != null) {
@@ -66,18 +81,6 @@ class AcagHelper
                 $Lat = $visit->latitude;
                 $percent = $visit->percent;
             }
-            $AmountApproved = $loan->loan_amount;
-
-            $loan_tranches = LoanTranches::find()
-                ->where(['loan_id' => $loan->id])
-                ->andWhere(['status' => 6])
-                ->all();
-            $amount_sum = 0;
-            foreach ($loan_tranches as $key => $amount) {
-                $amount_sum += $amount->tranch_amount;
-            }
-
-            $AmountDisbursed = $amount_sum;
         }
         $postFields = json_encode([
             "CNIC" => $cnic,
