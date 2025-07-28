@@ -329,6 +329,9 @@ class DisbursementHelper
                         "FirstDueDate"=>$first_schedule_date,
                         "SecondDisbursementDate"=> null,
                     ];
+
+                    print_r($obj);
+                    die();
                     AcagHelper::actionPushDisbursement($obj);
                 }
                 return true;

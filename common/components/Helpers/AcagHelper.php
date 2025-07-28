@@ -178,9 +178,6 @@ class AcagHelper
             "SecondDisbursementDate" => $obj['SecondDisbursementDate']
         ]);
 
-        print_r($postFields);
-        die();
-
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
