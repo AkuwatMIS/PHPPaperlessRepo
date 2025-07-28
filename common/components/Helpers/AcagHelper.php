@@ -96,7 +96,7 @@ class AcagHelper
             "Long" => strval($Long),
             "Lat" => strval($Lat)
         ]);
-        
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -177,6 +177,11 @@ class AcagHelper
             "FirstDueDate" => $obj['FirstDueDate'],
             "SecondDisbursementDate" => $obj['SecondDisbursementDate']
         ]);
+
+        echo '<pre>';
+        print_r($postFields);
+        die();
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
