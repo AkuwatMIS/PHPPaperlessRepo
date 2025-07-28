@@ -177,6 +177,7 @@ class AcagHelper
             "FirstDueDate" => $obj['FirstDueDate'],
             "SecondDisbursementDate" => $obj['SecondDisbursementDate']
         ]);
+        
 
         $curl = curl_init();
 

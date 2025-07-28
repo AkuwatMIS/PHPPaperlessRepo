@@ -324,14 +324,12 @@ class DisbursementHelper
                     $obj = [
                         "CNIC"=> $cnic_without_hyphens,
                         "FirstDisbursementDate"=> $disburse_date,
-                        "NoOfInstallments"=>$total_instalments,
-                        "MonthlyInstallmentAmount"=> $schedule_amount,
+                        "NoOfInstallments"=>ceil($total_instalments),
+                        "MonthlyInstallmentAmount"=> ceil($schedule_amount),
                         "FirstDueDate"=>$first_schedule_date,
                         "SecondDisbursementDate"=> null,
                     ];
 
-                    print_r($obj);
-                    die();
                     AcagHelper::actionPushDisbursement($obj);
                 }
                 return true;
