@@ -96,11 +96,7 @@ class AcagHelper
             "Long" => strval($Long),
             "Lat" => strval($Lat)
         ]);
-
-        if($Status =='Loan Rejected'){
-            print_r($postFields);
-            die();
-        }
+        
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
