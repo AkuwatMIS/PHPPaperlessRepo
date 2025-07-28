@@ -186,7 +186,7 @@ class BankAccountsController extends Controller
                                         $errors[]= [$row[0] => 'tranche disbursed date not updated'];
                                     }else{
                                         $loan = Loans::find()->where(['id'=>$tranch->loan_id])->one();
-                                        if(!empty($loan) && $loan!=null){
+                                        if(!empty($loan) && $loan!=null && $loan->project_id == 132){
                                             $cnic_without_hyphens = str_replace('-', '', $loan->application->member->cnic);
                                             $obj = [
                                                 "CNIC"=> $cnic_without_hyphens,
