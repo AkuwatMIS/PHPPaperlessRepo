@@ -316,10 +316,13 @@ class Recoveries extends \yii\db\ActiveRecord
             }
 
             //Check Recovery Amount less than balance
-            $cum_recv = $this->find()->select('sum(amount) as cum_amount, sum(charges_amount) as cum_charges_amount')->where([
+            $cum_recv = $this->find()
+                ->select('sum(amount) as cum_amount, sum(charges_amount) as cum_charges_amount')
+                ->where([
                 'loan_id' => $loan->id,
                 'recoveries.deleted' => '0'
-            ])->asArray()->one();
+            ])->asArray()
+                ->one();
             $schedule_info = $this->GetScheduleInfo($loan);
 
             $this->schedule_id = $schedule_info['id'];
@@ -336,22 +339,22 @@ class Recoveries extends \yii\db\ActiveRecord
                     ->all();
 
 
-                $schedule_till_this_date = Schedules::find()
+                $charges_schedule_till_this_date = Schedules::find()
                     ->where([
                         'loan_id' => $loan->id
                     ])->andWhere(["<=",'due_date' , $schedule_info['due_date']])
                     ->groupBy('id')
                     ->sum('charges_schdl_amount');
 
-                $recovery_till_this_date = $this->find()
+                $current_charges_received_till_this_date = $this->find()
                     ->where(['loan_id' => $loan->id])
-                    ->andWhere(["<=",'receive_date' , $schedule_info['due_date']])
+//                    ->andWhere(["<=",'receive_date' , $schedule_info['due_date']])
                     ->andWhere(['deleted' => 0])
                     ->groupBy('id')
                     ->sum('charges_amount');
 
-                if(empty($recovery_till_this_date)){
-                    $recovery_till_this_date = 0;
+                if(empty($current_charges_received_till_this_date)){
+                    $current_charges_received_till_this_date = 0;
                 }
 
 
@@ -382,7 +385,7 @@ class Recoveries extends \yii\db\ActiveRecord
 
                 if ($chargesReceivable > 0 || $dueReceivable >0 || $taxReceivable >0) {
 
-                    $required_charges_received = $schedule_till_this_date-$recovery_till_this_date;
+                    $required_charges_received = $charges_schedule_till_this_date-$current_charges_received_till_this_date;
 
                     if ($this->amount > $taxReceivable) {
                         $this->credit_tax = (string)$taxReceivable;
