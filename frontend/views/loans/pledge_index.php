@@ -48,6 +48,6 @@ $permissions = Yii::$app->session->get('permissions');
 </div>
 <?php Modal::begin([
     "id" => "ajaxCrudModal",
-    "footer" => "",// always need it for jquery plugin
+    "footer" => "", //always need it for jquery plugin//
 ]) ?>
 <?php Modal::end(); ?>
