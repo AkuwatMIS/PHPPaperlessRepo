@@ -157,7 +157,7 @@ $this->registerJs($js);
     ])->label('Activity');
     ?>
         <?php
-        if(!($model->isNewRecord) && ($model->project_id=='52' || $model->project_id=='77' || $model->project_id=='76' || $model->project_id=='61' || $model->project_id=='62' || $model->project_id=='64')) {
+        if(!($model->isNewRecord) && ($model->project_id=='52' || $model->project_id=='77' || $model->project_id=='76' || $model->project_id=='61' || $model->project_id=='62' || $model->project_id=='64' || $model->project_id=='67' || $model->project_id=='77' || $model->project_id=='83' || $model->project_id=='90' || $model->project_id=='97' || $model->project_id=='98'|| $model->project_id=='103' || $model->project_id=='109' || $model->project_id=='113' || $model->project_id=='127' || $model->project_id=='132' )) {
             $value = !empty($model->sub_activity) ? $model->sub_activity : null;
             echo $form->field($model, 'sub_activity', ['enableClientValidation' => false])->widget(DepDrop::classname(), [
                 'type' => DepDrop::TYPE_SELECT2,
